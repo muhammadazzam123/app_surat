@@ -2,8 +2,24 @@ import 'package:app_surat/navbar.dart';
 import 'package:app_surat/theme.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  _showSnackBar() {
+    SnackBar snackBar = SnackBar(
+      content: const Text('Yay! A SnackBar!'),
+      action: SnackBarAction(label: 'OK', onPressed: () {}),
+    );
+
+// Find the ScaffoldMessenger in the widget tree
+// and use it to show a SnackBar.
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 
   Future<void> _showMyDialog(BuildContext context) async {
     return showDialog<void>(
@@ -124,10 +140,41 @@ class HomePage extends StatelessWidget {
         drawer: const NavBar(),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: defaultMargin1),
-          child: Column(
-            children: [
-              _title(),
-            ],
+          child: RefreshIndicator(
+            onRefresh: () {
+              return Future.delayed(const Duration(seconds: 1), _showSnackBar);
+            },
+            child: ListView(
+              physics: const BouncingScrollPhysics(),
+              children: [
+                _title(),
+                SizedBox(height: defaultMargin2),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  color: Colors.amber,
+                  width: double.infinity,
+                  height: 200,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  color: Colors.amber,
+                  width: double.infinity,
+                  height: 200,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  color: Colors.amber,
+                  width: double.infinity,
+                  height: 200,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  color: Colors.amber,
+                  width: double.infinity,
+                  height: 200,
+                ),
+              ],
+            ),
           ),
         ));
   }

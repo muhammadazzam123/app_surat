@@ -60,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
         if (value!.isEmpty) {
           return "password tidak boleh kosong";
         } else if (passwordTextController.text.length < 6) {
-          return "password kurang dari 6 kata";
+          return "password kurang dari 6 karakter";
         }
         return null;
       },
@@ -78,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
           },
           child: Icon(
             passToggle ? Icons.visibility : Icons.visibility_off,
-            color: grayColor,
+            color: passToggle ? grayColor : primaryColor,
           ),
         ),
         border: const OutlineInputBorder(
