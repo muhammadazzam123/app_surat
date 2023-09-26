@@ -51,6 +51,8 @@ class MyApp extends StatelessWidget {
         '/detail-agenda': (context) => const DetailAgenda(),
         '/tambah-agenda': (context) => const TambahAgenda(),
         '/edit-agenda': (context) => const EditAgenda(),
+        // folder-pimpinan
+        // folder-admin
       },
     );
   }
