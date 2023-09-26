@@ -1,5 +1,8 @@
 import 'package:app_surat/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:iconify_flutter/iconify_flutter.dart';
+import 'package:iconify_flutter/icons/ion.dart';
+import 'package:iconify_flutter/icons/bi.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({super.key});
@@ -7,7 +10,7 @@ class NavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: primaryColor,
+      backgroundColor: blackColor2,
       child: ListView(
         children: [
           const SizedBox(height: 25),
@@ -19,11 +22,11 @@ class NavBar extends StatelessWidget {
                 Image.asset('assets/logo.png', height: 40),
                 const SizedBox(width: 10),
                 Text(
-                  'SIPS',
+                  'SIMS',
                   style: poppinsTextStyle.copyWith(
                     fontSize: 25,
                     fontWeight: regular,
-                    color: whiteColor,
+                    color: whiteColor.withOpacity(0.67),
                   ),
                 )
               ],
@@ -44,11 +47,11 @@ class NavBar extends StatelessWidget {
                 ),
                 const SizedBox(width: 10),
                 Text(
-                  'Admin',
+                  'Adelya Agustina',
                   style: poppinsTextStyle.copyWith(
                     fontSize: 16,
                     fontWeight: medium,
-                    color: whiteColor,
+                    color: whiteColor.withOpacity(0.67),
                   ),
                 )
               ],
@@ -57,68 +60,92 @@ class NavBar extends StatelessWidget {
           const SizedBox(height: 15),
           Divider(color: grayColor),
           ListTile(
-            leading: Icon(
-              Icons.home,
-              size: 20,
-              color: whiteColor,
+            leading: Iconify(
+              Ion.home,
+              size: 25,
+              color: whiteColor.withOpacity(0.67),
             ),
             title: Text(
               'Dashboard',
               style: poppinsTextStyle.copyWith(
-                fontSize: 13,
-                color: whiteColor,
+                fontSize: 16,
+                color: whiteColor.withOpacity(0.67),
+                fontWeight: medium,
+              ),
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, '/home');
+            },
+          ),
+          ListTile(
+            leading: Iconify(
+              Ion.mail,
+              size: 25,
+              color: whiteColor.withOpacity(0.67),
+            ),
+            title: Text(
+              'Surat Masuk',
+              style: poppinsTextStyle.copyWith(
+                fontSize: 16,
+                color: whiteColor.withOpacity(0.67),
+                fontWeight: medium,
+              ),
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, '/surat-masuk');
+            },
+          ),
+          ListTile(
+            leading: Iconify(
+              Ion.mail_open,
+              size: 25,
+              color: whiteColor.withOpacity(0.67),
+            ),
+            title: Text(
+              'Surat Keluar',
+              style: poppinsTextStyle.copyWith(
+                fontSize: 16,
+                color: whiteColor.withOpacity(0.67),
                 fontWeight: medium,
               ),
             ),
             onTap: () {},
           ),
           ListTile(
-            leading: Icon(
-              Icons.person,
-              size: 20,
-              color: whiteColor,
+            leading: Iconify(
+              Bi.tags_fill,
+              size: 25,
+              color: whiteColor.withOpacity(0.67),
             ),
             title: Text(
-              'Pegawai',
+              'Kode Surat',
               style: poppinsTextStyle.copyWith(
-                fontSize: 13,
-                color: whiteColor,
+                fontSize: 16,
+                color: whiteColor.withOpacity(0.67),
                 fontWeight: medium,
               ),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, '/kode-surat');
+            },
           ),
           ListTile(
-            leading: Icon(
-              Icons.dashboard,
-              size: 20,
-              color: whiteColor,
+            leading: Iconify(
+              Bi.calendar2_event_fill,
+              size: 25,
+              color: whiteColor.withOpacity(0.67),
             ),
             title: Text(
-              'Jabatan',
+              'Agenda',
               style: poppinsTextStyle.copyWith(
-                fontSize: 13,
-                color: whiteColor,
+                fontSize: 16,
+                color: whiteColor.withOpacity(0.67),
                 fontWeight: medium,
               ),
             ),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.lock_person,
-              size: 20,
-              color: whiteColor,
-            ),
-            title: Text(
-              'Hak Akses',
-              style: poppinsTextStyle.copyWith(
-                fontSize: 13,
-                color: whiteColor,
-                fontWeight: medium,
-              ),
-            ),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, '/agenda');
+            },
           ),
         ],
       ),

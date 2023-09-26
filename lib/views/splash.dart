@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:app_surat/login_page.dart';
+import 'package:app_surat/views/login_page.dart';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {
