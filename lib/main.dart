@@ -3,7 +3,7 @@ import 'package:app_surat/views/petugas/agenda/agenda.dart';
 import 'package:app_surat/views/petugas/agenda/detail_agenda.dart';
 import 'package:app_surat/views/petugas/agenda/edit_agenda.dart';
 import 'package:app_surat/views/petugas/agenda/tambah_agenda.dart';
-import 'package:app_surat/views/petugas/home_page.dart';
+import 'package:app_surat/views/petugas/home_petugas_page.dart';
 import 'package:app_surat/views/petugas/kodesurat/edit_kode_surat.dart';
 import 'package:app_surat/views/petugas/kodesurat/kodesurat.dart';
 import 'package:app_surat/views/petugas/kodesurat/tambah_kode_surat.dart';
@@ -15,9 +15,11 @@ import 'package:app_surat/views/petugas/suratmasukkeluar/tambah_surat.dart';
 import 'package:app_surat/views/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-main() {
+main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]).then((_) {
     runApp(
@@ -28,6 +30,7 @@ main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -38,7 +41,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const SplashPage(),
         '/login': (context) => const LoginPage(),
         // folder-petugas
-        '/home': (context) => const HomePage(),
+        '/home-petugas': (context) => const HomePage(),
         '/surat-masuk': (context) => const SuratMasuk(),
         '/surat-keluar': (context) => const SuratKeluar(),
         '/detail-surat': (context) => const DetailSurat(),

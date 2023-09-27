@@ -1,5 +1,7 @@
+import 'package:app_surat/services/auth_service.dart';
 import 'package:app_surat/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,6 +15,61 @@ class _LoginPageState extends State<LoginPage> {
   bool passToggle = true;
   TextEditingController usernameTextController = TextEditingController();
   TextEditingController passwordTextController = TextEditingController();
+  bool _isLoading = false;
+
+  void _showSnackBar(String text) {
+    SnackBar snackBar = SnackBar(
+      content: Text(text),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void _validateForm() {
+    if (_formState.currentState!.validate()) {
+      _login();
+    }
+  }
+
+  void _login() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      Map<String, dynamic> data = {
+        "username": usernameTextController.text,
+        "password": passwordTextController.text
+      };
+
+      final response = await AuthService().authLogin(data);
+
+      if (response['success']) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('appToken', response['token']);
+        await prefs.setInt('userId', response['user']['id']);
+        int level = response['user']['jabatan']['level'];
+        await prefs.setInt('userLevel', level);
+
+        if (context.mounted) {
+          if (level == 1) {
+            Navigator.pushReplacementNamed(context, '/home-petugas');
+          } else {
+            _showSnackBar('Belum ada level');
+          }
+        }
+      } else {
+        _showSnackBar(response['message']);
+      }
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      _showSnackBar('Error :$e');
+    }
+  }
 
   Widget _logo() {
     return Image.asset(
@@ -103,22 +160,20 @@ class _LoginPageState extends State<LoginPage> {
       width: double.infinity,
       height: 54,
       child: ElevatedButton(
-        onPressed: () {
-          if (_formState.currentState!.validate()) {
-            Navigator.pushNamed(context, '/home');
-            usernameTextController.clear();
-            passwordTextController.clear();
-          }
-        },
+        onPressed: _validateForm,
         style: ElevatedButton.styleFrom(
             backgroundColor: primaryColor,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10))),
-        child: Text(
-          'Masuk',
-          style: poppinsTextStyle.copyWith(
-              fontSize: 16, fontWeight: semiBold, color: Colors.white),
-        ),
+        child: _isLoading
+            ? const CircularProgressIndicator(
+                color: Colors.white,
+              )
+            : Text(
+                'Masuk',
+                style: poppinsTextStyle.copyWith(
+                    fontSize: 16, fontWeight: semiBold, color: Colors.white),
+              ),
       ),
     );
   }

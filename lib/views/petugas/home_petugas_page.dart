@@ -1,6 +1,8 @@
+import 'package:app_surat/services/auth_service.dart';
 import 'package:app_surat/theme.dart';
-import 'package:app_surat/views/pegawai/navbar.dart';
+import 'package:app_surat/views/petugas/navbar.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,14 +12,29 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  _showSnackBar() {
+  void _logout() async {
+    try {
+      final response = await AuthService().authLogout();
+      if (response.statusCode == 200) {
+        SharedPreferences refs = await SharedPreferences.getInstance();
+        refs.remove('appToken');
+        refs.remove('userId');
+        refs.remove('userLevel');
+        if (context.mounted) {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/login', (route) => false);
+        }
+      }
+    } catch (e) {
+      _showSnackBar('$e');
+    }
+  }
+
+  _showSnackBar(String text) {
     SnackBar snackBar = SnackBar(
-      content: const Text('Yay! A SnackBar!'),
+      content: Text(text),
       action: SnackBarAction(label: 'OK', onPressed: () {}),
     );
-
-// Find the ScaffoldMessenger in the widget tree
-// and use it to show a SnackBar.
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
@@ -60,7 +77,7 @@ class _HomePageState extends State<HomePage> {
             TextButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStatePropertyAll(primaryColor)),
-              onPressed: () {},
+              onPressed: _logout,
               child: Text('Keluar',
                   style: poppinsTextStyle.copyWith(
                       fontSize: 12, fontWeight: semiBold, color: whiteColor)),
@@ -134,7 +151,8 @@ class _HomePageState extends State<HomePage> {
         padding: EdgeInsets.symmetric(horizontal: defaultMargin1),
         child: RefreshIndicator(
           onRefresh: () {
-            return Future.delayed(const Duration(seconds: 1), _showSnackBar);
+            return Future.delayed(
+                const Duration(seconds: 1), _showSnackBar('abcdefgjiklmnop'));
           },
           child: ListView(
             physics: const BouncingScrollPhysics(),
