@@ -1,17 +1,17 @@
 import 'package:app_surat/views/login_page.dart';
-import 'package:app_surat/views/pegawai/agenda/agenda.dart';
-import 'package:app_surat/views/pegawai/agenda/detail_agenda.dart';
-import 'package:app_surat/views/pegawai/agenda/edit_agenda.dart';
-import 'package:app_surat/views/pegawai/agenda/tambah_agenda.dart';
-import 'package:app_surat/views/pegawai/home_page.dart';
-import 'package:app_surat/views/pegawai/kodesurat/edit_kode_surat.dart';
-import 'package:app_surat/views/pegawai/kodesurat/kodesurat.dart';
-import 'package:app_surat/views/pegawai/kodesurat/tambah_kode_surat.dart';
-import 'package:app_surat/views/pegawai/suratmasukkeluar/detail_surat.dart';
-import 'package:app_surat/views/pegawai/suratmasukkeluar/edit_surat.dart';
-import 'package:app_surat/views/pegawai/suratmasukkeluar/suratkeluar.dart';
-import 'package:app_surat/views/pegawai/suratmasukkeluar/suratmasuk.dart';
-import 'package:app_surat/views/pegawai/suratmasukkeluar/tambah_surat.dart';
+import 'package:app_surat/views/petugas/agenda/agenda.dart';
+import 'package:app_surat/views/petugas/agenda/detail_agenda.dart';
+import 'package:app_surat/views/petugas/agenda/edit_agenda.dart';
+import 'package:app_surat/views/petugas/agenda/tambah_agenda.dart';
+import 'package:app_surat/views/petugas/home_page.dart';
+import 'package:app_surat/views/petugas/kodesurat/edit_kode_surat.dart';
+import 'package:app_surat/views/petugas/kodesurat/kodesurat.dart';
+import 'package:app_surat/views/petugas/kodesurat/tambah_kode_surat.dart';
+import 'package:app_surat/views/petugas/suratmasukkeluar/detail_surat.dart';
+import 'package:app_surat/views/petugas/suratmasukkeluar/edit_surat.dart';
+import 'package:app_surat/views/petugas/suratmasukkeluar/suratkeluar.dart';
+import 'package:app_surat/views/petugas/suratmasukkeluar/suratmasuk.dart';
+import 'package:app_surat/views/petugas/suratmasukkeluar/tambah_surat.dart';
 import 'package:app_surat/views/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,13 +31,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Sisfo Monitoring Pegawai Dishub Sumsel Bagian Lalin',
+      title: 'Sisfo Manajemen Surat Mobile',
       theme: ThemeData(),
       debugShowCheckedModeBanner: false,
       routes: {
         '/': (context) => const SplashPage(),
         '/login': (context) => const LoginPage(),
-        // folder-pegawai
+        // folder-petugas
         '/home': (context) => const HomePage(),
         '/surat-masuk': (context) => const SuratMasuk(),
         '/surat-keluar': (context) => const SuratKeluar(),
