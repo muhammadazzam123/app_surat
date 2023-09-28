@@ -19,7 +19,13 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _countedDataPetugas = CountedDataService().getCountedDataPetugas();
+    _getCountedData();
+  }
+
+  void _getCountedData() {
+    setState(() {
+      _countedDataPetugas = CountedDataService().getCountedDataPetugas();
+    });
   }
 
   void _logout() async {
@@ -161,8 +167,7 @@ class _HomePageState extends State<HomePage> {
         padding: EdgeInsets.symmetric(horizontal: defaultMargin1),
         child: RefreshIndicator(
           onRefresh: () {
-            return Future.delayed(
-                const Duration(seconds: 1), _showSnackBar('abcdefgjiklmnop'));
+            return Future.delayed(const Duration(seconds: 1), _getCountedData);
           },
           child: FutureBuilder(
               future: _countedDataPetugas,
