@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   final String _apiUri = dotenv.get('API_URI');
-  final _dio = Dio();
+  final Dio _dio = Dio();
 
   authLogin(Map<String, dynamic> data) async {
     try {
