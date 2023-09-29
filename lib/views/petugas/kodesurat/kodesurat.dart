@@ -2,8 +2,8 @@ import 'package:app_surat/theme.dart';
 import 'package:app_surat/views/petugas/navbar.dart';
 import 'package:flutter/material.dart';
 
-class KodeSurat extends StatelessWidget {
-  const KodeSurat({super.key});
+class KodeSuratPage extends StatelessWidget {
+  const KodeSuratPage({super.key});
 
   Future<void> _showMyDialog(BuildContext context) async {
     return showDialog<void>(

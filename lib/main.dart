@@ -10,9 +10,9 @@ import 'package:app_surat/views/petugas/kodesurat/tambah_kode_surat.dart';
 import 'package:app_surat/views/petugas/suratmasukkeluar/detail_surat.dart';
 import 'package:app_surat/views/petugas/suratmasukkeluar/edit_surat.dart';
 import 'package:app_surat/views/petugas/suratmasukkeluar/suratkeluar.dart';
-import 'package:app_surat/views/petugas/suratmasukkeluar/suratmasuk.dart';
+import 'package:app_surat/views/petugas/suratmasukkeluar/surat_masuk_page.dart';
 import 'package:app_surat/views/petugas/suratmasukkeluar/tambah_surat.dart';
-import 'package:app_surat/views/splash.dart';
+import 'package:app_surat/views/splas_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -42,12 +42,12 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginPage(),
         // folder-petugas
         '/home-petugas': (context) => const HomePage(),
-        '/surat-masuk': (context) => const SuratMasuk(),
+        '/surat-masuk': (context) => const SuratMasukPage(),
         '/surat-keluar': (context) => const SuratKeluar(),
         '/detail-surat': (context) => const DetailSurat(),
         '/tambah-surat': (context) => const TambahSurat(),
         '/edit-surat': (context) => const EditSurat(),
-        '/kode-surat': (context) => const KodeSurat(),
+        '/kode-surat': (context) => const KodeSuratPage(),
         '/tambah-kode-surat': (context) => const TambahKodeSurat(),
         '/edit-kode-surat': (context) => const EditKodeSurat(),
         '/agenda': (context) => const AgendaSurat(),

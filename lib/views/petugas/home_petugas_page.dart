@@ -14,7 +14,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future<CountedDataPetugas>? _countedDataPetugas;
+  late Future<CountedDataPetugas> _countedDataPetugas;
 
   @override
   void initState() {
