@@ -1,4 +1,5 @@
 import 'package:app_surat/models/kode_surat_model.dart';
+import 'package:app_surat/models/pegawai_model.dart';
 
 class SuratMasuk {
   int? id;
@@ -14,6 +15,7 @@ class SuratMasuk {
   String? createdAt;
   String? updatedAt;
   KodeSurat? kodeSurat;
+  Pegawai? pegawai;
 
   SuratMasuk(
       {this.id,
@@ -28,7 +30,8 @@ class SuratMasuk {
       this.asalSurat,
       this.createdAt,
       this.updatedAt,
-      this.kodeSurat});
+      this.kodeSurat,
+      this.pegawai});
 
   SuratMasuk.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -46,6 +49,8 @@ class SuratMasuk {
     kodeSurat = json['kode_surat'] != null
         ? KodeSurat.fromJson(json['kode_surat'])
         : null;
+    pegawai =
+        json['pegawai'] != null ? Pegawai.fromJson(json['pegawai']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -64,6 +69,9 @@ class SuratMasuk {
     data['updated_at'] = updatedAt;
     if (kodeSurat != null) {
       data['kode_surat'] = kodeSurat!.toJson();
+    }
+    if (pegawai != null) {
+      data['pegawai'] = pegawai!.toJson();
     }
     return data;
   }
