@@ -1,5 +1,5 @@
 import 'package:app_surat/theme.dart';
-import 'package:app_surat/views/petugas/navbar.dart';
+import 'package:app_surat/views/petugas/navbar_petugas.dart';
 import 'package:flutter/material.dart';
 
 class KodeSuratPage extends StatelessWidget {
