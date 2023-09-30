@@ -74,7 +74,7 @@ class NavBar extends StatelessWidget {
               ),
             ),
             onTap: () {
-              Navigator.pushNamed(context, '/home');
+              Navigator.pushNamed(context, '/home-petugas');
             },
           ),
           ListTile(
