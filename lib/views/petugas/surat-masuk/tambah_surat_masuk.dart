@@ -112,6 +112,14 @@ class _TambahSuratState extends State<TambahSurat> {
               size: 20,
               color: grayColor,
             ),
+            label: Text(
+              'masukkan tanggal surat..',
+              style: poppinsTextStyle.copyWith(
+                fontSize: 12,
+                fontWeight: medium,
+                color: grayColor,
+              ),
+            ),
             border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))),
             focusedBorder: OutlineInputBorder(
@@ -305,7 +313,7 @@ class _TambahSuratState extends State<TambahSurat> {
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(
                   horizontal: defaultMargin2, vertical: defaultMargin2 / 2),
-              hintText: "Silahkan Pilih",
+              hintText: "pilih pembuat",
               hintStyle: poppinsTextStyle.copyWith(
                   color: grayColor, fontWeight: medium, fontSize: 12),
               border: const OutlineInputBorder(
@@ -425,7 +433,7 @@ class _TambahSuratState extends State<TambahSurat> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'filesuratkependudukan.pdf',
+                'file belum dipilih ...',
                 style: poppinsTextStyle.copyWith(
                     fontSize: 12, fontWeight: semiBold, color: grayColor),
               ),

@@ -6,7 +6,7 @@ class AuthService {
   final String _apiUri = dotenv.get('API_URI');
   final Dio _dio = Dio();
 
-  authLogin(Map<String, dynamic> data) async {
+  Future authLogin(Map<String, dynamic> data) async {
     try {
       String fullUri = '$_apiUri/v1/auth/login';
       final response = await _dio.post(fullUri, data: data);
@@ -16,7 +16,7 @@ class AuthService {
     }
   }
 
-  authLogout() async {
+  Future authLogout() async {
     try {
       String fullUri = '$_apiUri/v1/auth/logout';
       SharedPreferences prefs = await SharedPreferences.getInstance();

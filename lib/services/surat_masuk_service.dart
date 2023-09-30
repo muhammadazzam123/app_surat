@@ -9,7 +9,7 @@ class SuratMasukService {
 
   Future<List<SuratMasuk>> getSuratMasuks() async {
     try {
-      String fullUri = '$_apiUri/v1/surat-masuks';
+      final String fullUri = '$_apiUri/v1/surat-masuks';
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String token = prefs.getString('appToken').toString();
       Response response = await _dio.get(fullUri,
@@ -20,5 +20,11 @@ class SuratMasukService {
     } on DioException catch (e) {
       throw Exception(e.message);
     }
+  }
+
+  Future postSuratMasuk(Map<String, dynamic> data) async {
+    try {
+      final String fullUri = '$_apiUri/v1/surat-masuks';
+    } catch (e) {}
   }
 }

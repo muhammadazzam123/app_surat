@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         _isLoading = true;
       });
-      Map<String, dynamic> data = {
+      final Map<String, dynamic> data = {
         "username": usernameTextController.text,
         "password": passwordTextController.text
       };

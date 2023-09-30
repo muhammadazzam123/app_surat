@@ -11,7 +11,7 @@ import 'package:app_surat/views/petugas/surat-masuk/detail_surat_masuk_page.dart
 import 'package:app_surat/views/petugas/surat-masuk/edit_surat.dart';
 import 'package:app_surat/views/petugas/surat-keluar/suratkeluar.dart';
 import 'package:app_surat/views/petugas/surat-masuk/surat_masuk_page.dart';
-import 'package:app_surat/views/petugas/surat-masuk/tambah_surat.dart';
+import 'package:app_surat/views/petugas/surat-masuk/tambah_surat_masuk.dart';
 import 'package:app_surat/views/splas_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
