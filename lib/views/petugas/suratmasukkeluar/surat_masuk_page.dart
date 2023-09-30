@@ -216,7 +216,8 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  Navigator.pushNamed(context, '/detail-surat');
+                                  Navigator.pushNamed(context, '/detail-surat',
+                                      arguments: snapshot.data![index]);
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(

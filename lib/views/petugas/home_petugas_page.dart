@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
   void _logout() async {
     try {
       final response = await AuthService().authLogout();
-      if (response.statusCode == 200) {
+      if (response['success']) {
         SharedPreferences refs = await SharedPreferences.getInstance();
         refs.remove('appToken');
         refs.remove('userId');
@@ -40,6 +40,8 @@ class _HomePageState extends State<HomePage> {
           Navigator.pushNamedAndRemoveUntil(
               context, '/login', (route) => false);
         }
+      } else {
+        _showSnackBar(response['message']);
       }
     } catch (e) {
       _showSnackBar('$e');

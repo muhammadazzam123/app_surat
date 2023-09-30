@@ -7,7 +7,7 @@ import 'package:app_surat/views/petugas/home_petugas_page.dart';
 import 'package:app_surat/views/petugas/kodesurat/edit_kode_surat.dart';
 import 'package:app_surat/views/petugas/kodesurat/kodesurat.dart';
 import 'package:app_surat/views/petugas/kodesurat/tambah_kode_surat.dart';
-import 'package:app_surat/views/petugas/suratmasukkeluar/detail_surat.dart';
+import 'package:app_surat/views/petugas/suratmasukkeluar/detail_surat_page.dart';
 import 'package:app_surat/views/petugas/suratmasukkeluar/edit_surat.dart';
 import 'package:app_surat/views/petugas/suratmasukkeluar/suratkeluar.dart';
 import 'package:app_surat/views/petugas/suratmasukkeluar/surat_masuk_page.dart';
