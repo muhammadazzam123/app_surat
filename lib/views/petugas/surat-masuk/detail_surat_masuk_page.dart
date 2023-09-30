@@ -1,8 +1,9 @@
+import 'package:app_surat/models/surat_masuk_model.dart';
 import 'package:app_surat/theme.dart';
 import 'package:flutter/material.dart';
 
-class DetailSurat extends StatelessWidget {
-  const DetailSurat({super.key});
+class DetailSuratPage extends StatelessWidget {
+  const DetailSuratPage({super.key});
 
   Widget _title() {
     return Container(
@@ -15,7 +16,7 @@ class DetailSurat extends StatelessWidget {
     );
   }
 
-  Widget _body() {
+  Widget _body(SuratMasuk suratMasuk) {
     return Container(
       alignment: Alignment.topLeft,
       child: Column(
@@ -28,7 +29,7 @@ class DetailSurat extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Text(
-            '800/891/IX/XI/2022',
+            '${suratMasuk.noSurat}',
             style: poppinsTextStyle.copyWith(
                 fontSize: 11, fontWeight: medium, color: blackColor),
           ),
@@ -40,7 +41,7 @@ class DetailSurat extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Text(
-            '14/11/2022',
+            '${suratMasuk.tglMasuk}',
             style: poppinsTextStyle.copyWith(
                 fontSize: 11, fontWeight: medium, color: blackColor),
           ),
@@ -52,7 +53,7 @@ class DetailSurat extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Text(
-            'Asisten Administrasi Umum Sekretariat',
+            '${suratMasuk.asalSurat}',
             style: poppinsTextStyle.copyWith(
                 fontSize: 11, fontWeight: medium, color: blackColor),
           ),
@@ -64,7 +65,7 @@ class DetailSurat extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Text(
-            'Laporan Hasil Analisis Kesenjangan Kinerja Pegawai Negeri Sipil',
+            '${suratMasuk.perihalindex}',
             style: poppinsTextStyle.copyWith(
                 fontSize: 11, fontWeight: medium, color: blackColor),
           ),
@@ -76,9 +77,10 @@ class DetailSurat extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Text(
-            'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nisi eveniet deleniti, fugiat quae excepturi doloremque ',
+            '${suratMasuk.isiSurat}',
             style: poppinsTextStyle.copyWith(
                 fontSize: 11, fontWeight: medium, color: blackColor),
+            textAlign: TextAlign.justify,
           ),
           const SizedBox(height: 10),
           Text(
@@ -88,7 +90,7 @@ class DetailSurat extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Text(
-            'Petugas Pengelola Surat',
+            '${suratMasuk.pegawai!.nama}',
             style: poppinsTextStyle.copyWith(
                 fontSize: 11, fontWeight: medium, color: blackColor),
           ),
@@ -100,7 +102,7 @@ class DetailSurat extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Text(
-            '1',
+            '${suratMasuk.lampiran}',
             style: poppinsTextStyle.copyWith(
                 fontSize: 11, fontWeight: medium, color: blackColor),
           ),
@@ -129,6 +131,7 @@ class DetailSurat extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(height: 20),
         ],
       ),
     );
@@ -136,6 +139,7 @@ class DetailSurat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as SuratMasuk;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -161,7 +165,7 @@ class DetailSurat extends StatelessWidget {
             children: [
               _title(),
               const SizedBox(height: 25),
-              _body(),
+              _body(args),
             ],
           ),
         ),
