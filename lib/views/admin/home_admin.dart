@@ -207,7 +207,9 @@ class _HomeAdminState extends State<HomeAdmin> {
                   'Hak Akses',
                   // countedData.suratKeluars!
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, '/hak-akses-page');
+                },
               ),
             ],
           ),
