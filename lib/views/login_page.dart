@@ -178,6 +178,31 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Widget _testMasuk() {
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, '/home-admin');
+          },
+          child: Text(
+            'Halaman Admin',
+            style: poppinsTextStyle.copyWith(
+                fontSize: 20, fontWeight: semiBold, color: grayColor),
+          ),
+        ),
+        GestureDetector(
+          onTap: () {},
+          child: Text(
+            'Halaman Pimpinan',
+            style: poppinsTextStyle.copyWith(
+                fontSize: 20, fontWeight: semiBold, color: grayColor),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -197,6 +222,8 @@ class _LoginPageState extends State<LoginPage> {
                   _passwordInput(),
                   const SizedBox(height: 50),
                   _buttonMasuk(),
+                  const SizedBox(height: 20),
+                  _testMasuk(),
                 ],
               ),
             ),

@@ -1,3 +1,11 @@
+import 'package:app_surat/views/admin/home_admin.dart';
+import 'package:app_surat/views/admin/jabatan/edit_jabatan.dart';
+import 'package:app_surat/views/admin/jabatan/jabatan_page.dart';
+import 'package:app_surat/views/admin/jabatan/tambah_jabatan.dart';
+import 'package:app_surat/views/admin/pegawai/detail_pegawai.dart';
+import 'package:app_surat/views/admin/pegawai/edit_pegawai.dart';
+import 'package:app_surat/views/admin/pegawai/pegawai_page.dart';
+import 'package:app_surat/views/admin/pegawai/tambah_pegawai.dart';
 import 'package:app_surat/views/login_page.dart';
 import 'package:app_surat/views/petugas/agenda/agenda.dart';
 import 'package:app_surat/views/petugas/agenda/detail_agenda.dart';
@@ -56,6 +64,14 @@ class MyApp extends StatelessWidget {
         '/edit-agenda': (context) => const EditAgenda(),
         // folder-pimpinan
         // folder-admin
+        '/home-admin': (context) => const HomeAdmin(),
+        '/pegawai-page': (context) => const PegawaiPage(),
+        '/detail-pegawai': (context) => const DetailPegawai(),
+        '/tambah-pegawai': (context) => const TambahPegawai(),
+        '/edit-pegawai': (context) => const EditPegawai(),
+        '/jabatan-page': (context) => const JabatanPage(),
+        '/tambah-jabatan': (context) => const TambahJabatan(),
+        '/edit-jabatan': (context) => const EditJabatan(),
       },
     );
   }

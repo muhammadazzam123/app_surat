@@ -2,8 +2,8 @@ import 'package:app_surat/theme.dart';
 import 'package:app_surat/views/petugas/navbar_petugas.dart';
 import 'package:flutter/material.dart';
 
-class AgendaSurat extends StatelessWidget {
-  const AgendaSurat({super.key});
+class JabatanPage extends StatelessWidget {
+  const JabatanPage({super.key});
 
   Future<void> _showMyDialog(BuildContext context) async {
     return showDialog<void>(
@@ -17,7 +17,7 @@ class AgendaSurat extends StatelessWidget {
             child: ListBody(
               children: <Widget>[
                 Text(
-                  'Apakah Anda yakin ingin menghapus agenda undangan ini?',
+                  'Apakah Anda yakin ingin menghapus jabatan ini?',
                   style: poppinsTextStyle.copyWith(
                     fontSize: 14,
                     fontWeight: semiBold,
@@ -59,9 +59,9 @@ class AgendaSurat extends StatelessWidget {
     return Row(
       children: [
         Text(
-          'Agenda Undangan',
+          'Jabatan',
           style: poppinsTextStyle.copyWith(
-            fontSize: 18,
+            fontSize: 26,
             fontWeight: semiBold,
             color: blackColor,
           ),
@@ -71,7 +71,7 @@ class AgendaSurat extends StatelessWidget {
           height: 25,
           child: ElevatedButton.icon(
             onPressed: () {
-              Navigator.pushNamed(context, '/tambah-agenda');
+              Navigator.pushNamed(context, '/tambah-kode-surat');
             },
             icon: Icon(
               Icons.add,
@@ -148,7 +148,7 @@ class AgendaSurat extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Dr. Elena Ryan',
+                  'SDKP/0/71/14/NOV',
                   style: poppinsTextStyle.copyWith(
                     fontSize: 15,
                     fontWeight: semiBold,
@@ -157,7 +157,7 @@ class AgendaSurat extends StatelessWidget {
                 ),
                 const SizedBox(height: 5),
                 Text(
-                  '07 Sep 1991',
+                  'NOTA DINAS',
                   style: poppinsTextStyle.copyWith(
                     fontSize: 11,
                     fontWeight: semiBold,
@@ -166,7 +166,7 @@ class AgendaSurat extends StatelessWidget {
                 ),
                 const SizedBox(height: 5),
                 Text(
-                  '4698 Fisher Forges Apt. 446 Hoegerfort, MO 63503-0900',
+                  'Laporan Hasil Analisis Kesenjangan Kinerja Pegawai Negeri Sipil',
                   style: poppinsTextStyle.copyWith(
                     fontSize: 11,
                     fontWeight: medium,
@@ -181,28 +181,7 @@ class AgendaSurat extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
-                        Navigator.pushNamed(context, '/detail-agenda');
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 3, horizontal: 13),
-                        decoration: BoxDecoration(
-                          color: color1,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Text(
-                          'Detail',
-                          style: poppinsTextStyle.copyWith(
-                              fontSize: 11,
-                              fontWeight: semiBold,
-                              color: whiteColor),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/edit-agenda');
+                        Navigator.pushNamed(context, '/edit-kode-surat');
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -279,7 +258,7 @@ class AgendaSurat extends StatelessWidget {
           child: Column(
             children: [
               _title(context),
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
               _columnSerach(),
               const SizedBox(height: 27),
               _listData(),
