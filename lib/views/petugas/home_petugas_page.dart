@@ -181,7 +181,8 @@ class _HomePageState extends State<HomePage> {
                 } else if (snapshot.hasData) {
                   final countedData = snapshot.data;
                   return ListView(
-                    physics: const AlwaysScrollableScrollPhysics(),
+                    physics: const AlwaysScrollableScrollPhysics(
+                        parent: BouncingScrollPhysics()),
                     children: [
                       _title(),
                       SizedBox(height: defaultMargin2),
