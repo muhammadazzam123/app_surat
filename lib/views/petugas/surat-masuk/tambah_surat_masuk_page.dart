@@ -337,7 +337,7 @@ class _TambahSuratMasukPageState extends State<TambahSuratMasukPage> {
         TextFormField(
           validator: (value) {
             if (value == '') {
-              return "username tidak boleh kosong";
+              return "perihal tidak boleh kosong";
             }
             return null;
           },

@@ -16,7 +16,9 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
 class EditSuratMasukPage extends StatefulWidget {
-  const EditSuratMasukPage({super.key});
+  const EditSuratMasukPage({super.key, this.suratMasuk});
+
+  final SuratMasuk? suratMasuk;
 
   @override
   State<EditSuratMasukPage> createState() => _EditSuratMasukPageState();
@@ -45,8 +47,21 @@ class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
   void initState() {
     super.initState();
     initializeDateFormatting();
-    dateFormat = DateFormat.yMMMMEEEEd('id');
+    dateFormat = DateFormat('dd-MM-yyyy', 'id');
     _getDataNames();
+    _setData();
+  }
+
+  _setData() {
+    nomorTextController.text = '${widget.suratMasuk!.noSurat}';
+    tanggalController.text = '${widget.suratMasuk!.tglMasuk}';
+    asalTextController.text = '${widget.suratMasuk!.asalSurat}';
+    perihalTextController.text = '${widget.suratMasuk!.perihalindex}';
+    isiTextController.text = '${widget.suratMasuk!.isiSurat}';
+    pembuatTextController.text = '${widget.suratMasuk!.pegawai!.id}';
+    lampiranTextController.text = '${widget.suratMasuk!.lampiran}';
+    kodeTextController.text = '${widget.suratMasuk!.kodeSurat!.id}';
+    _fileName = '${widget.suratMasuk!.fileSm}';
   }
 
   _getDataNames() async {
@@ -96,12 +111,8 @@ class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
   }
 
   void _validateForm() {
-    if (_formState.currentState!.validate() && _suratFile != null) {
+    if (_formState.currentState!.validate()) {
       _editSuratMasuk();
-    } else {
-      if (context.mounted) {
-        SnackBarService().showSnackBar('file tidak boleh kosong', context);
-      }
     }
   }
 
@@ -112,22 +123,34 @@ class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
       });
 
       FormData suratData = FormData.fromMap({
-        'isi_surat': isiTextController.text,
-        'perihalindex': perihalTextController.text,
-        'lampiran': lampiranTextController.text,
-        'no_surat': nomorTextController.text,
-        'tgl_masuk': dateFormat.parse(tanggalController.text),
-        'file':
-            await MultipartFile.fromFile(_suratFile!.path, filename: _fileName),
-        'asal_surat': asalTextController.text,
-        'kode_surat_id': int.parse(kodeTextController.text),
-        'pegawai_id': int.parse(pembuatTextController.text)
+        if (isiTextController.text != '') 'isi_surat': isiTextController.text,
+        if (perihalTextController.text != '')
+          'perihalindex': perihalTextController.text,
+        if (lampiranTextController.text != '')
+          'lampiran': lampiranTextController.text,
+        if (nomorTextController.text != '')
+          'no_surat': nomorTextController.text,
+        if (tanggalController.text != '')
+          'tgl_masuk': dateFormat.parse(tanggalController.text),
+        if (_suratFile != null)
+          'file': await MultipartFile.fromFile(_suratFile!.path,
+              filename: _fileName),
+        if (asalTextController.text != '')
+          'asal_surat': asalTextController.text,
+        if (kodeTextController.text != '')
+          'kode_surat_id': int.parse(kodeTextController.text),
+        if (pembuatTextController.text != '')
+          'pegawai_id': int.parse(pembuatTextController.text)
       });
 
-      final Response response =
-          await SuratMasukService().postSuratMasuk(suratData);
+      print(suratData.fields);
+      print(widget.suratMasuk!.id);
+
+      final Response response = await SuratMasukService()
+          .patchSuratMasuk(suratData, widget.suratMasuk!.id);
 
       if (response.statusCode == 200) {
+        print(response.data);
         if (context.mounted) {
           Navigator.pushReplacementNamed(context, '/surat-masuk');
           SnackBarService().showSnackBar(response.data['message'], context);
@@ -148,6 +171,7 @@ class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
         _isLoading = false;
       });
     } catch (e) {
+      print(e);
       setState(() {
         _isLoading = false;
       });
@@ -180,6 +204,13 @@ class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
         ),
         const SizedBox(height: 10),
         TextFormField(
+          validator: (value) {
+            if (value == '') {
+              return "data tidak boleh kosong";
+            }
+            return null;
+          },
+          controller: nomorTextController,
           decoration: InputDecoration(
             border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -217,6 +248,12 @@ class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
         ),
         const SizedBox(height: 10),
         TextFormField(
+          validator: (value) {
+            if (value == '') {
+              return "tanggal tidak boleh kosong";
+            }
+            return null;
+          },
           controller: tanggalController,
           decoration: InputDecoration(
             suffixIcon: Icon(
@@ -246,7 +283,7 @@ class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
             DateTime? pickedDate = await showDatePicker(
               context: context,
               initialDate: DateTime.now(),
-              firstDate: DateTime(DateTime.now().year),
+              firstDate: DateTime(2000),
               lastDate: DateTime(DateTime.now().year + 3),
               initialEntryMode: DatePickerEntryMode.calendarOnly,
             );
@@ -277,6 +314,13 @@ class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
         ),
         const SizedBox(height: 10),
         TextFormField(
+          controller: asalTextController,
+          validator: (value) {
+            if (value == '') {
+              return "data tidak boleh kosong";
+            }
+            return null;
+          },
           decoration: InputDecoration(
             border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -314,6 +358,13 @@ class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
         ),
         const SizedBox(height: 10),
         TextFormField(
+          validator: (value) {
+            if (value == '') {
+              return "perihal tidak boleh kosong";
+            }
+            return null;
+          },
+          controller: perihalTextController,
           decoration: InputDecoration(
             border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -351,6 +402,15 @@ class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
         ),
         const SizedBox(height: 10),
         TextFormField(
+          validator: (value) {
+            if (value == '') {
+              return "data tidak boleh kosong";
+            }
+            return null;
+          },
+          controller: isiTextController,
+          maxLines: 5,
+          keyboardType: TextInputType.multiline,
           decoration: InputDecoration(
             border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -388,16 +448,18 @@ class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
         ),
         const SizedBox(height: 10),
         DropdownSearch<String>(
-          popupProps: PopupProps.menu(
+          validator: (value) {
+            if (value == null) {
+              return "data tidak boleh kosong";
+            }
+            return null;
+          },
+          selectedItem: widget.suratMasuk!.pegawai!.nama,
+          popupProps: const PopupProps.menu(
             showSelectedItems: true,
-            disabledItemFn: (String s) => s.startsWith('I'),
-            constraints: const BoxConstraints(maxHeight: 170),
+            constraints: BoxConstraints(maxHeight: 170),
           ),
-          items: const [
-            'Ayam',
-            'Sapi',
-            'Kambing',
-          ],
+          items: _pegawaiNames,
           clearButtonProps: const ClearButtonProps(isVisible: true),
           dropdownDecoratorProps: DropDownDecoratorProps(
             dropdownSearchDecoration: InputDecoration(
@@ -410,6 +472,9 @@ class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
                   borderRadius: BorderRadius.all(Radius.circular(10))),
             ),
           ),
+          onChanged: (String? value) {
+            _pickPembuat('$value');
+          },
         ),
       ],
     );
@@ -429,6 +494,13 @@ class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
         ),
         const SizedBox(height: 10),
         TextFormField(
+          validator: (value) {
+            if (value == '') {
+              return "data tidak boleh kosong";
+            }
+            return null;
+          },
+          controller: lampiranTextController,
           decoration: InputDecoration(
             border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -466,16 +538,18 @@ class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
         ),
         const SizedBox(height: 10),
         DropdownSearch<String>(
-          popupProps: PopupProps.menu(
+          validator: (value) {
+            if (value == null) {
+              return "data tidak boleh kosong";
+            }
+            return null;
+          },
+          selectedItem: widget.suratMasuk!.kodeSurat!.kode,
+          popupProps: const PopupProps.menu(
             showSelectedItems: true,
-            disabledItemFn: (String s) => s.startsWith('I'),
-            constraints: const BoxConstraints(maxHeight: 170),
+            constraints: BoxConstraints(maxHeight: 170),
           ),
-          items: const [
-            'Ayam',
-            'Sapi',
-            'Kambing',
-          ],
+          items: _kodeSuratCodes,
           clearButtonProps: const ClearButtonProps(isVisible: true),
           dropdownDecoratorProps: DropDownDecoratorProps(
             dropdownSearchDecoration: InputDecoration(
@@ -488,6 +562,9 @@ class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
                   borderRadius: BorderRadius.all(Radius.circular(10))),
             ),
           ),
+          onChanged: (String? value) {
+            _pickKodeSurat('$value');
+          },
         ),
       ],
     );
@@ -498,7 +575,7 @@ class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'File',
+          'File  (.pdf/.jpg)',
           style: poppinsTextStyle.copyWith(
             fontSize: 10,
             fontWeight: semiBold,
@@ -516,12 +593,12 @@ class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'filesuratkependudukan.pdf',
+                _fileName,
                 style: poppinsTextStyle.copyWith(
                     fontSize: 12, fontWeight: semiBold, color: grayColor),
               ),
               InkWell(
-                onTap: () {},
+                onTap: _pickFile,
                 child: Container(
                   padding:
                       const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
@@ -548,23 +625,24 @@ class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
       height: 54,
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: _validateForm,
         style: ElevatedButton.styleFrom(
             backgroundColor: primaryColor,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10))),
-        child: Text(
-          'Kirim',
-          style: poppinsTextStyle.copyWith(
-              fontSize: 16, fontWeight: semiBold, color: Colors.white),
-        ),
+        child: _isLoading
+            ? const CircularProgressIndicator()
+            : Text(
+                'Kirim',
+                style: poppinsTextStyle.copyWith(
+                    fontSize: 16, fontWeight: semiBold, color: Colors.white),
+              ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as SuratMasuk;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -587,31 +665,38 @@ class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
         physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: defaultMargin1),
-          child: Column(
-            children: [
-              _title(),
-              const SizedBox(height: 25),
-              _formNomorSurat(),
-              const SizedBox(height: 15),
-              _formTanggalSurat(context),
-              const SizedBox(height: 15),
-              _formAsalSurat(),
-              const SizedBox(height: 15),
-              _formPerihalIndex(),
-              const SizedBox(height: 15),
-              _formIsiSurat(),
-              const SizedBox(height: 15),
-              _formpembuatSurat(),
-              const SizedBox(height: 15),
-              _formLampiranSurat(),
-              const SizedBox(height: 15),
-              _formKodeSurat(),
-              const SizedBox(height: 15),
-              _file(),
-              const SizedBox(height: 30),
-              _buttonKirim(),
-              const SizedBox(height: 15),
-            ],
+          child: Form(
+            key: _formState,
+            child: Column(
+              children: [
+                _title(),
+                const SizedBox(height: 25),
+                _formNomorSurat(),
+                const SizedBox(height: 15),
+                _formTanggalSurat(context),
+                const SizedBox(height: 15),
+                _formAsalSurat(),
+                const SizedBox(height: 15),
+                _formPerihalIndex(),
+                const SizedBox(height: 15),
+                _formIsiSurat(),
+                const SizedBox(height: 15),
+                _pegawaiNames.isEmpty
+                    ? const CircularProgressIndicator()
+                    : _formpembuatSurat(),
+                const SizedBox(height: 15),
+                _formLampiranSurat(),
+                const SizedBox(height: 15),
+                _kodeSuratCodes.isEmpty
+                    ? const CircularProgressIndicator()
+                    : _formKodeSurat(),
+                const SizedBox(height: 15),
+                _file(),
+                const SizedBox(height: 30),
+                _buttonKirim(),
+                const SizedBox(height: 15),
+              ],
+            ),
           ),
         ),
       ),

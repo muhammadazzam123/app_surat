@@ -36,6 +36,21 @@ class SuratMasukService {
     }
   }
 
+  Future patchSuratMasuk(FormData data, int? suratMasukId) async {
+    try {
+      final String fullUri =
+          '$_apiUri/v1/surat-masuks/$suratMasukId?_method=PATCH';
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString('appToken').toString();
+      Response response = await _dio.post(fullUri,
+          data: data,
+          options: Options(headers: {"Authorization": 'Bearer $token'}));
+      return response;
+    } on DioException catch (e) {
+      return e.response;
+    }
+  }
+
   Future deleteSuratMasuk(int? suratMasukId) async {
     try {
       final String fullUri = '$_apiUri/v1/surat-masuks/$suratMasukId';

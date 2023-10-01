@@ -3,6 +3,7 @@ import 'package:app_surat/services/snackbar_service.dart';
 import 'package:app_surat/services/surat_masuk_service.dart';
 import 'package:app_surat/theme.dart';
 import 'package:app_surat/views/petugas/navbar_petugas.dart';
+import 'package:app_surat/views/petugas/surat-masuk/edit_surat_masuk_page.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -279,9 +280,13 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
                               const SizedBox(width: 6),
                               InkWell(
                                 onTap: () {
-                                  Navigator.pushNamed(
-                                      context, '/edit-surat-masuk',
-                                      arguments: snapshot.data![index]);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              EditSuratMasukPage(
+                                                  suratMasuk:
+                                                      snapshot.data![index])));
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
