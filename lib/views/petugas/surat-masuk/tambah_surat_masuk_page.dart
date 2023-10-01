@@ -14,14 +14,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
-class TambahSuratPage extends StatefulWidget {
-  const TambahSuratPage({super.key});
+class TambahSuratMasukPage extends StatefulWidget {
+  const TambahSuratMasukPage({super.key});
 
   @override
-  State<TambahSuratPage> createState() => _TambahSuratPageState();
+  State<TambahSuratMasukPage> createState() => _TambahSuratMasukPageState();
 }
 
-class _TambahSuratPageState extends State<TambahSuratPage> {
+class _TambahSuratMasukPageState extends State<TambahSuratMasukPage> {
   final _formState = GlobalKey<FormState>();
   TextEditingController nomorTextController = TextEditingController();
   TextEditingController tanggalController = TextEditingController();

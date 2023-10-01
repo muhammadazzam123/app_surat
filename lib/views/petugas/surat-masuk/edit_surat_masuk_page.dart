@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
-class EditSurat extends StatefulWidget {
-  const EditSurat({super.key});
+class EditSuratMasukPage extends StatefulWidget {
+  const EditSuratMasukPage({super.key});
 
   @override
-  State<EditSurat> createState() => _EditSuratState();
+  State<EditSuratMasukPage> createState() => _EditSuratMasukPageState();
 }
 
-class _EditSuratState extends State<EditSurat> {
+class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
   TextEditingController tanggalController = TextEditingController();
   late DateFormat dateFormat;
 

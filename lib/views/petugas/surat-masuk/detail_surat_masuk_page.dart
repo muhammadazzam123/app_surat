@@ -2,8 +2,8 @@ import 'package:app_surat/models/surat_masuk_model.dart';
 import 'package:app_surat/theme.dart';
 import 'package:flutter/material.dart';
 
-class DetailSuratPage extends StatelessWidget {
-  const DetailSuratPage({super.key});
+class DetailSuratMasukPage extends StatelessWidget {
+  const DetailSuratMasukPage({super.key});
 
   Widget _title() {
     return Container(
