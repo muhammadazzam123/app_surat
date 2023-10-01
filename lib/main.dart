@@ -22,7 +22,7 @@ import 'package:app_surat/views/petugas/surat-masuk/detail_surat_masuk_page.dart
 import 'package:app_surat/views/petugas/surat-masuk/edit_surat.dart';
 import 'package:app_surat/views/petugas/surat-keluar/suratkeluar.dart';
 import 'package:app_surat/views/petugas/surat-masuk/surat_masuk_page.dart';
-import 'package:app_surat/views/petugas/surat-masuk/tambah_surat_masuk.dart';
+import 'package:app_surat/views/petugas/surat-masuk/tambah_surat_masuk_page.dart';
 import 'package:app_surat/views/pimpinan/disposisi_page.dart';
 import 'package:app_surat/views/pimpinan/edit_disposisi.dart';
 import 'package:app_surat/views/pimpinan/home_pimpinan.dart';

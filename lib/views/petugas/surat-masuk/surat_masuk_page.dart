@@ -1,7 +1,9 @@
 import 'package:app_surat/models/surat_masuk_model.dart';
+import 'package:app_surat/services/snackbar_service.dart';
 import 'package:app_surat/services/surat_masuk_service.dart';
 import 'package:app_surat/theme.dart';
 import 'package:app_surat/views/petugas/navbar_petugas.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class SuratMasukPage extends StatefulWidget {
@@ -13,6 +15,7 @@ class SuratMasukPage extends StatefulWidget {
 
 class _SuratMasukPageState extends State<SuratMasukPage> {
   late Future<List<SuratMasuk>> _suratMasuks;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -26,7 +29,38 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
     });
   }
 
-  Future<void> _showMyDialog(BuildContext context) async {
+  _deleteSuratMasuk(int? suratMasukId) async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      final Response response =
+          await SuratMasukService().deleteSuratMasuk(suratMasukId);
+
+      if (response.statusCode == 200) {
+        _getSuratMasuks();
+        if (mounted) {
+          Navigator.pop(context);
+          SnackBarService()
+              .showSnackBar('${response.data['message']}', context);
+        }
+      } else {
+        if (mounted) {
+          SnackBarService()
+              .showSnackBar('${response.data['message']}', context);
+        }
+      }
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (e) {
+      if (mounted) {
+        SnackBarService().showSnackBar('e', context);
+      }
+    }
+  }
+
+  Future<void> _showMyDialog(BuildContext context, int? suratMasukId) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -65,10 +99,16 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
             TextButton(
               style: ButtonStyle(
                   backgroundColor: MaterialStatePropertyAll(color4)),
-              onPressed: () {},
-              child: Text('Hapus',
-                  style: poppinsTextStyle.copyWith(
-                      fontSize: 12, fontWeight: semiBold, color: whiteColor)),
+              onPressed: () {
+                _deleteSuratMasuk(suratMasukId);
+              },
+              child: _isLoading
+                  ? const CircularProgressIndicator(color: Colors.white)
+                  : Text('Hapus',
+                      style: poppinsTextStyle.copyWith(
+                          fontSize: 12,
+                          fontWeight: semiBold,
+                          color: whiteColor)),
             ),
           ],
         );
@@ -259,7 +299,8 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
                               const SizedBox(width: 6),
                               InkWell(
                                 onTap: () {
-                                  _showMyDialog(context);
+                                  _showMyDialog(
+                                      context, snapshot.data![index].id);
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(

@@ -52,15 +52,17 @@ class _TambahSuratPageState extends State<TambahSuratPage> {
     _kodeSurats = await KodeSuratService().getfilteredKodeSurats();
     _pegawais = await PegawaiService().getPegawais();
 
-    setState(() {
-      for (final pegawai in _pegawais) {
-        _pegawaiNames.add('${pegawai.nama}');
-      }
+    if (mounted) {
+      setState(() {
+        for (final pegawai in _pegawais) {
+          _pegawaiNames.add('${pegawai.nama}');
+        }
 
-      for (final kodeSurat in _kodeSurats) {
-        _kodeSuratCodes.add('${kodeSurat.kode}');
-      }
-    });
+        for (final kodeSurat in _kodeSurats) {
+          _kodeSuratCodes.add('${kodeSurat.kode}');
+        }
+      });
+    }
   }
 
   void _pickPembuat(String selectedPegawaiName) {
