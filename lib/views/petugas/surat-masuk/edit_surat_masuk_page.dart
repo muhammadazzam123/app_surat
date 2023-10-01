@@ -47,7 +47,7 @@ class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
   void initState() {
     super.initState();
     initializeDateFormatting();
-    dateFormat = DateFormat('dd-MM-yyyy', 'id');
+    dateFormat = DateFormat('yyyy-MM-dd', 'id');
     _getDataNames();
     _setData();
   }
