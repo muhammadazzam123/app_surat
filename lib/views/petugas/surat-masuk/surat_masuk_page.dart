@@ -132,7 +132,7 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
           height: 25,
           child: ElevatedButton.icon(
             onPressed: () {
-              Navigator.pushNamed(context, '/tambah-surat');
+              Navigator.pushNamed(context, '/tambah-surat-masuk');
             },
             icon: Icon(
               Icons.add,
@@ -256,7 +256,8 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  Navigator.pushNamed(context, '/detail-surat',
+                                  Navigator.pushNamed(
+                                      context, '/detail-surat-masuk',
                                       arguments: snapshot.data![index]);
                                 },
                                 child: Container(
@@ -278,7 +279,9 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
                               const SizedBox(width: 6),
                               InkWell(
                                 onTap: () {
-                                  Navigator.pushNamed(context, '/edit-surat');
+                                  Navigator.pushNamed(
+                                      context, '/edit-surat-masuk',
+                                      arguments: snapshot.data![index]);
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(

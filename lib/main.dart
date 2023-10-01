@@ -58,10 +58,10 @@ class MyApp extends StatelessWidget {
         // folder-petugas
         '/home-petugas': (context) => const HomePage(),
         '/surat-masuk': (context) => const SuratMasukPage(),
+        '/detail-surat-masuk': (context) => const DetailSuratMasukPage(),
+        '/tambah-surat-masuk': (context) => const TambahSuratMasukPage(),
+        '/edit-surat-masuk': (context) => const EditSuratMasukPage(),
         '/surat-keluar': (context) => const SuratKeluar(),
-        '/detail-surat': (context) => const DetailSuratMasukPage(),
-        '/tambah-surat': (context) => const TambahSuratMasukPage(),
-        '/edit-surat': (context) => const EditSuratMasukPage(),
         '/kode-surat': (context) => const KodeSuratPage(),
         '/tambah-kode-surat': (context) => const TambahKodeSurat(),
         '/edit-kode-surat': (context) => const EditKodeSurat(),

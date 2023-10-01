@@ -247,41 +247,39 @@ class ListContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.symmetric(
+          horizontal: defaultMargin1, vertical: defaultMargin2),
       margin: EdgeInsets.only(bottom: defaultMargin2),
       decoration: BoxDecoration(
         color: color,
         borderRadius: const BorderRadius.all(Radius.circular(10)),
       ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: defaultMargin1, vertical: defaultMargin2),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '$jumlahData',
-                  style: poppinsTextStyle.copyWith(
-                    fontSize: 40,
-                    fontWeight: semiBold,
-                    color: whiteColor,
-                  ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '$jumlahData',
+                style: poppinsTextStyle.copyWith(
+                  fontSize: 40,
+                  fontWeight: semiBold,
+                  color: whiteColor,
                 ),
-                Text(
-                  titleText,
-                  style: poppinsTextStyle.copyWith(
-                    fontSize: 20,
-                    fontWeight: semiBold,
-                    color: whiteColor,
-                  ),
+              ),
+              Text(
+                titleText,
+                style: poppinsTextStyle.copyWith(
+                  fontSize: 20,
+                  fontWeight: semiBold,
+                  color: whiteColor,
                 ),
-              ],
-            ),
-            image,
-          ],
-        ),
+              ),
+            ],
+          ),
+          image,
+        ],
       ),
     );
   }
