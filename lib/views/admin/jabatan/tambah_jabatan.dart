@@ -1,4 +1,5 @@
 import 'package:app_surat/theme.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
 class TambahJabatan extends StatefulWidget {
@@ -9,8 +10,8 @@ class TambahJabatan extends StatefulWidget {
 }
 
 class _TambahJabatanState extends State<TambahJabatan> {
-  TextEditingController nomorTextController = TextEditingController();
-  TextEditingController asalTextController = TextEditingController();
+  TextEditingController levelTextController = TextEditingController();
+  TextEditingController jabatanTextController = TextEditingController();
   final _formState = GlobalKey<FormState>();
 
   Widget _title() {
@@ -24,12 +25,12 @@ class _TambahJabatanState extends State<TambahJabatan> {
     );
   }
 
-  Widget _formNomorSurat() {
+  Widget _level() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Nama Kode',
+          'Level',
           style: poppinsTextStyle.copyWith(
             fontSize: 10,
             fontWeight: semiBold,
@@ -37,43 +38,39 @@ class _TambahJabatanState extends State<TambahJabatan> {
           ),
         ),
         const SizedBox(height: 10),
-        TextFormField(
-          validator: (value) {
-            if (value == '') {
-              return "data tidak boleh kosong";
-            }
-            return null;
-          },
-          controller: nomorTextController,
-          decoration: InputDecoration(
-            border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10))),
-            focusedBorder: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-                borderSide: BorderSide(color: primaryColor)),
-            floatingLabelBehavior: FloatingLabelBehavior.never,
-            label: Text(
-              'masukkan nama kode surat..',
-              style: poppinsTextStyle.copyWith(
-                fontSize: 12,
-                fontWeight: medium,
-                color: grayColor,
-              ),
-            ),
-            contentPadding:
-                EdgeInsets.symmetric(horizontal: defaultMargin2, vertical: 17),
+        DropdownSearch<String>(
+          popupProps: PopupProps.menu(
+            showSelectedItems: true,
+            disabledItemFn: (String s) => s.startsWith('I'),
+            constraints: const BoxConstraints(maxHeight: 130),
           ),
-        )
+          items: const [
+            '1',
+            '2',
+          ],
+          clearButtonProps: const ClearButtonProps(isVisible: true),
+          dropdownDecoratorProps: DropDownDecoratorProps(
+            dropdownSearchDecoration: InputDecoration(
+              contentPadding: EdgeInsets.symmetric(
+                  horizontal: defaultMargin2, vertical: defaultMargin2 / 2),
+              hintText: "pilih level",
+              hintStyle: poppinsTextStyle.copyWith(
+                  color: grayColor, fontWeight: medium, fontSize: 12),
+              border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+            ),
+          ),
+        ),
       ],
     );
   }
 
-  Widget _formAsalSurat() {
+  Widget _jabatan() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Keterangan',
+          'Jabatan',
           style: poppinsTextStyle.copyWith(
             fontSize: 10,
             fontWeight: semiBold,
@@ -88,7 +85,7 @@ class _TambahJabatanState extends State<TambahJabatan> {
             }
             return null;
           },
-          controller: asalTextController,
+          controller: jabatanTextController,
           decoration: InputDecoration(
             border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -97,7 +94,7 @@ class _TambahJabatanState extends State<TambahJabatan> {
                 borderSide: BorderSide(color: primaryColor)),
             floatingLabelBehavior: FloatingLabelBehavior.never,
             label: Text(
-              'masukkan keterangan...',
+              'masukkan jabatan anda...',
               style: poppinsTextStyle.copyWith(
                 fontSize: 12,
                 fontWeight: medium,
@@ -163,9 +160,9 @@ class _TambahJabatanState extends State<TambahJabatan> {
               children: [
                 _title(),
                 const SizedBox(height: 25),
-                _formNomorSurat(),
+                _level(),
                 const SizedBox(height: 15),
-                _formAsalSurat(),
+                _jabatan(),
                 const SizedBox(height: 30),
                 _buttonKirim(),
                 const SizedBox(height: 15),

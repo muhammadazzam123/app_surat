@@ -1,8 +1,18 @@
 import 'package:app_surat/theme.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
-class EditJabatan extends StatelessWidget {
+class EditJabatan extends StatefulWidget {
   const EditJabatan({super.key});
+
+  @override
+  State<EditJabatan> createState() => _EditJabatanState();
+}
+
+class _EditJabatanState extends State<EditJabatan> {
+  TextEditingController levelTextController = TextEditingController();
+  TextEditingController jabatanTextController = TextEditingController();
+  final _formState = GlobalKey<FormState>();
 
   Widget _title() {
     return Container(
@@ -15,12 +25,12 @@ class EditJabatan extends StatelessWidget {
     );
   }
 
-  Widget _formNomorSurat() {
+  Widget _level() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Nama Kode',
+          'Level',
           style: poppinsTextStyle.copyWith(
             fontSize: 10,
             fontWeight: semiBold,
@@ -28,36 +38,39 @@ class EditJabatan extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-        TextFormField(
-          decoration: InputDecoration(
-            border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10))),
-            focusedBorder: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-                borderSide: BorderSide(color: primaryColor)),
-            floatingLabelBehavior: FloatingLabelBehavior.never,
-            label: Text(
-              'masukkan nama kode surat..',
-              style: poppinsTextStyle.copyWith(
-                fontSize: 12,
-                fontWeight: medium,
-                color: grayColor,
-              ),
-            ),
-            contentPadding:
-                EdgeInsets.symmetric(horizontal: defaultMargin2, vertical: 17),
+        DropdownSearch<String>(
+          popupProps: PopupProps.menu(
+            showSelectedItems: true,
+            disabledItemFn: (String s) => s.startsWith('I'),
+            constraints: const BoxConstraints(maxHeight: 130),
           ),
-        )
+          items: const [
+            '1',
+            '2',
+          ],
+          clearButtonProps: const ClearButtonProps(isVisible: true),
+          dropdownDecoratorProps: DropDownDecoratorProps(
+            dropdownSearchDecoration: InputDecoration(
+              contentPadding: EdgeInsets.symmetric(
+                  horizontal: defaultMargin2, vertical: defaultMargin2 / 2),
+              hintText: "pilih level",
+              hintStyle: poppinsTextStyle.copyWith(
+                  color: grayColor, fontWeight: medium, fontSize: 12),
+              border: const OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))),
+            ),
+          ),
+        ),
       ],
     );
   }
 
-  Widget _formAsalSurat() {
+  Widget _jabatan() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Keterangan',
+          'Jabatan',
           style: poppinsTextStyle.copyWith(
             fontSize: 10,
             fontWeight: semiBold,
@@ -66,6 +79,13 @@ class EditJabatan extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         TextFormField(
+          validator: (value) {
+            if (value == '') {
+              return "data tidak boleh kosong";
+            }
+            return null;
+          },
+          controller: jabatanTextController,
           decoration: InputDecoration(
             border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -74,7 +94,7 @@ class EditJabatan extends StatelessWidget {
                 borderSide: BorderSide(color: primaryColor)),
             floatingLabelBehavior: FloatingLabelBehavior.never,
             label: Text(
-              'masukkan keterangan...',
+              'masukkan jabatan anda...',
               style: poppinsTextStyle.copyWith(
                 fontSize: 12,
                 fontWeight: medium,
@@ -94,13 +114,15 @@ class EditJabatan extends StatelessWidget {
       height: 54,
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          if (_formState.currentState!.validate()) {}
+        },
         style: ElevatedButton.styleFrom(
             backgroundColor: primaryColor,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10))),
         child: Text(
-          'Edit',
+          'Kirim',
           style: poppinsTextStyle.copyWith(
               fontSize: 16, fontWeight: semiBold, color: Colors.white),
         ),
@@ -132,17 +154,20 @@ class EditJabatan extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: defaultMargin1),
-          child: Column(
-            children: [
-              _title(),
-              const SizedBox(height: 25),
-              _formNomorSurat(),
-              const SizedBox(height: 15),
-              _formAsalSurat(),
-              const SizedBox(height: 30),
-              _buttonKirim(),
-              const SizedBox(height: 15),
-            ],
+          child: Form(
+            key: _formState,
+            child: Column(
+              children: [
+                _title(),
+                const SizedBox(height: 25),
+                _level(),
+                const SizedBox(height: 15),
+                _jabatan(),
+                const SizedBox(height: 30),
+                _buttonKirim(),
+                const SizedBox(height: 15),
+              ],
+            ),
           ),
         ),
       ),

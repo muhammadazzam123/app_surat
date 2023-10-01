@@ -1,12 +1,11 @@
 import 'package:app_surat/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
-import 'package:iconify_flutter/icons/ci.dart';
-import 'package:iconify_flutter/icons/ion.dart';
-import 'package:iconify_flutter/icons/bi.dart';
 
-class NavbarAdmin extends StatelessWidget {
-  const NavbarAdmin({super.key});
+import 'package:iconify_flutter/icons/ion.dart';
+
+class NavbarPimpinan extends StatelessWidget {
+  const NavbarPimpinan({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +47,7 @@ class NavbarAdmin extends StatelessWidget {
                 ),
                 const SizedBox(width: 10),
                 Text(
-                  'admin',
+                  'pimpinan',
                   style: poppinsTextStyle.copyWith(
                     fontSize: 16,
                     fontWeight: medium,
@@ -75,17 +74,17 @@ class NavbarAdmin extends StatelessWidget {
               ),
             ),
             onTap: () {
-              Navigator.pushNamed(context, '/home-admin');
+              Navigator.pushNamed(context, '/home-pimpinan');
             },
           ),
           ListTile(
             leading: Iconify(
-              Ion.people_sharp,
+              Ion.ios_mail_unread,
               size: 25,
               color: whiteColor.withOpacity(0.67),
             ),
             title: Text(
-              'Pegawai',
+              'Disposisi',
               style: poppinsTextStyle.copyWith(
                 fontSize: 16,
                 color: whiteColor.withOpacity(0.67),
@@ -93,43 +92,7 @@ class NavbarAdmin extends StatelessWidget {
               ),
             ),
             onTap: () {
-              Navigator.pushNamed(context, '/pegawai-page');
-            },
-          ),
-          ListTile(
-            leading: Iconify(
-              Ci.dashboard,
-              size: 25,
-              color: whiteColor.withOpacity(0.67),
-            ),
-            title: Text(
-              'Jabatan',
-              style: poppinsTextStyle.copyWith(
-                fontSize: 16,
-                color: whiteColor.withOpacity(0.67),
-                fontWeight: medium,
-              ),
-            ),
-            onTap: () {
-              Navigator.pushNamed(context, '/jabatan-page');
-            },
-          ),
-          ListTile(
-            leading: Iconify(
-              Bi.shield_check,
-              size: 25,
-              color: whiteColor.withOpacity(0.67),
-            ),
-            title: Text(
-              'Hak Akses',
-              style: poppinsTextStyle.copyWith(
-                fontSize: 16,
-                color: whiteColor.withOpacity(0.67),
-                fontWeight: medium,
-              ),
-            ),
-            onTap: () {
-              Navigator.pushNamed(context, '/hak-akses-page');
+              Navigator.pushNamed(context, '/disposisi-page');
             },
           ),
         ],

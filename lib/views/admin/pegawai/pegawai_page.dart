@@ -1,5 +1,5 @@
 import 'package:app_surat/theme.dart';
-import 'package:app_surat/views/petugas/navbar_petugas.dart';
+import 'package:app_surat/views/admin/navbar_admin.dart';
 import 'package:flutter/material.dart';
 
 class PegawaiPage extends StatelessWidget {
@@ -271,7 +271,7 @@ class PegawaiPage extends StatelessWidget {
                   ))),
         ),
       ),
-      drawer: const NavBar(),
+      drawer: const NavbarAdmin(),
       body: SizedBox(
         height: MediaQuery.of(context).size.height * 1.1,
         child: Padding(

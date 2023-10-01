@@ -1,3 +1,6 @@
+import 'package:app_surat/views/admin/hak_akses/edit_hakakses.dart';
+import 'package:app_surat/views/admin/hak_akses/hak_akses_page.dart';
+import 'package:app_surat/views/admin/hak_akses/tambah_hakakses.dart';
 import 'package:app_surat/views/admin/home_admin.dart';
 import 'package:app_surat/views/admin/jabatan/edit_jabatan.dart';
 import 'package:app_surat/views/admin/jabatan/jabatan_page.dart';
@@ -20,6 +23,10 @@ import 'package:app_surat/views/petugas/surat-masuk/edit_surat.dart';
 import 'package:app_surat/views/petugas/surat-keluar/suratkeluar.dart';
 import 'package:app_surat/views/petugas/surat-masuk/surat_masuk_page.dart';
 import 'package:app_surat/views/petugas/surat-masuk/tambah_surat_masuk.dart';
+import 'package:app_surat/views/pimpinan/disposisi_page.dart';
+import 'package:app_surat/views/pimpinan/edit_disposisi.dart';
+import 'package:app_surat/views/pimpinan/home_pimpinan.dart';
+import 'package:app_surat/views/pimpinan/tambah_disposisi.dart';
 import 'package:app_surat/views/splas_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -53,7 +60,7 @@ class MyApp extends StatelessWidget {
         '/surat-masuk': (context) => const SuratMasukPage(),
         '/surat-keluar': (context) => const SuratKeluar(),
         '/detail-surat': (context) => const DetailSuratPage(),
-        '/tambah-surat': (context) => const TambahSurat(),
+        '/tambah-surat': (context) => const TambahSuratPage(),
         '/edit-surat': (context) => const EditSurat(),
         '/kode-surat': (context) => const KodeSuratPage(),
         '/tambah-kode-surat': (context) => const TambahKodeSurat(),
@@ -63,6 +70,10 @@ class MyApp extends StatelessWidget {
         '/tambah-agenda': (context) => const TambahAgenda(),
         '/edit-agenda': (context) => const EditAgenda(),
         // folder-pimpinan
+        '/home-pimpinan': (context) => const HomePimpinan(),
+        '/disposisi-page': (context) => const DisposisiPage(),
+        '/tambah-disposisi': (context) => const TambahDisposisi(),
+        '/edit-disposisi': (context) => const EditDisposisi(),
         // folder-admin
         '/home-admin': (context) => const HomeAdmin(),
         '/pegawai-page': (context) => const PegawaiPage(),
@@ -72,6 +83,9 @@ class MyApp extends StatelessWidget {
         '/jabatan-page': (context) => const JabatanPage(),
         '/tambah-jabatan': (context) => const TambahJabatan(),
         '/edit-jabatan': (context) => const EditJabatan(),
+        '/hak-akses-page': (context) => const HakAksesPage(),
+        '/tambah-hak-akses': (context) => const TambahHakAkses(),
+        '/edit-hak-akses': (context) => const EditHakAkses(),
       },
     );
   }

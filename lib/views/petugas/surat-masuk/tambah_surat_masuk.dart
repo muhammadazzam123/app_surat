@@ -1,17 +1,27 @@
+import 'dart:io';
+
+import 'package:app_surat/models/kode_surat_model.dart';
+import 'package:app_surat/models/pegawai_model.dart';
+import 'package:app_surat/services/kode_surat_service.dart';
+import 'package:app_surat/services/pegawai_service.dart';
+import 'package:app_surat/services/snackbar_service.dart';
+import 'package:app_surat/services/surat_masuk_service.dart';
 import 'package:app_surat/theme.dart';
+import 'package:dio/dio.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
-class TambahSurat extends StatefulWidget {
-  const TambahSurat({super.key});
+class TambahSuratPage extends StatefulWidget {
+  const TambahSuratPage({super.key});
 
   @override
-  State<TambahSurat> createState() => _TambahSuratState();
+  State<TambahSuratPage> createState() => _TambahSuratPageState();
 }
 
-class _TambahSuratState extends State<TambahSurat> {
+class _TambahSuratPageState extends State<TambahSuratPage> {
   final _formState = GlobalKey<FormState>();
   TextEditingController nomorTextController = TextEditingController();
   TextEditingController tanggalController = TextEditingController();
@@ -21,13 +31,125 @@ class _TambahSuratState extends State<TambahSurat> {
   TextEditingController pembuatTextController = TextEditingController();
   TextEditingController lampiranTextController = TextEditingController();
   TextEditingController kodeTextController = TextEditingController();
+  String _fileName = 'file belum dipilih ...';
+  File? _suratFile;
+  late List<Pegawai> _pegawais;
+  late List<KodeSurat> _kodeSurats;
+  final List<String> _pegawaiNames = [];
+  final List<String> _kodeSuratCodes = [];
   late DateFormat dateFormat;
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     initializeDateFormatting();
     dateFormat = DateFormat.yMMMMEEEEd('id');
+    _getDataNames();
+  }
+
+  _getDataNames() async {
+    _kodeSurats = await KodeSuratService().getfilteredKodeSurats();
+    _pegawais = await PegawaiService().getPegawais();
+
+    setState(() {
+      for (final pegawai in _pegawais) {
+        _pegawaiNames.add('${pegawai.nama}');
+      }
+
+      for (final kodeSurat in _kodeSurats) {
+        _kodeSuratCodes.add('${kodeSurat.kode}');
+      }
+    });
+  }
+
+  void _pickPembuat(String selectedPegawaiName) {
+    for (final pegawai in _pegawais) {
+      if (selectedPegawaiName == pegawai.nama) {
+        pembuatTextController.text = pegawai.id.toString();
+      }
+    }
+  }
+
+  void _pickKodeSurat(String selectedKodeSurat) {
+    for (final kodeSurat in _kodeSurats) {
+      if (selectedKodeSurat == kodeSurat.kode) {
+        kodeTextController.text = kodeSurat.id.toString();
+      }
+    }
+  }
+
+  void _pickFile() async {
+    FilePickerResult? result = await FilePicker.platform
+        .pickFiles(type: FileType.custom, allowedExtensions: ['jpg', 'pdf']);
+
+    if (result != null) {
+      PlatformFile file = result.files.single;
+      setState(() {
+        _fileName = file.name;
+        _suratFile = File('${file.path}');
+      });
+    }
+  }
+
+  void _validateForm() {
+    if (_formState.currentState!.validate() && _suratFile != null) {
+      _addSuratMasuk();
+    } else {
+      if (context.mounted) {
+        SnackBarService().showSnackBar('file tidak boleh kosong', context);
+      }
+    }
+  }
+
+  void _addSuratMasuk() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+
+      FormData suratData = FormData.fromMap({
+        'isi_surat': isiTextController.text,
+        'perihalindex': perihalTextController.text,
+        'lampiran': lampiranTextController.text,
+        'no_surat': nomorTextController.text,
+        'tgl_masuk': dateFormat.parse(tanggalController.text),
+        'file':
+            await MultipartFile.fromFile(_suratFile!.path, filename: _fileName),
+        'asal_surat': asalTextController.text,
+        'kode_surat_id': int.parse(kodeTextController.text),
+        'pegawai_id': int.parse(pembuatTextController.text)
+      });
+
+      final Response response =
+          await SuratMasukService().postSuratMasuk(suratData);
+
+      if (response.statusCode == 200) {
+        if (context.mounted) {
+          Navigator.pushReplacementNamed(context, '/surat-masuk');
+          SnackBarService().showSnackBar(response.data['message'], context);
+        }
+      } else if (response.statusCode == 500) {
+        if (context.mounted) {
+          SnackBarService().showSnackBar(
+              'Terjadi kesalahan pada server. Coba beberapa saat lagi',
+              context);
+        }
+      } else {
+        if (context.mounted) {
+          SnackBarService().showSnackBar('${response.data}', context);
+        }
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      if (context.mounted) SnackBarService().showSnackBar('$e', context);
+    }
   }
 
   Widget _title() {
@@ -134,17 +256,18 @@ class _TambahSuratState extends State<TambahSurat> {
             DateTime? pickedDate = await showDatePicker(
               context: context,
               initialDate: DateTime.now(),
-              firstDate: DateTime(DateTime.now().year),
+              firstDate: DateTime(2000),
               lastDate: DateTime(DateTime.now().year + 3),
               initialEntryMode: DatePickerEntryMode.calendarOnly,
             );
 
             if (pickedDate != null) {
-              debugPrint(pickedDate.toString());
               String formattedDate = dateFormat.format(pickedDate);
               setState(() {
                 tanggalController.text = formattedDate;
               });
+            } else {
+              tanggalController.clear();
             }
           },
         )
@@ -261,6 +384,8 @@ class _TambahSuratState extends State<TambahSurat> {
             return null;
           },
           controller: isiTextController,
+          maxLines: 5,
+          keyboardType: TextInputType.multiline,
           decoration: InputDecoration(
             border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -284,7 +409,7 @@ class _TambahSuratState extends State<TambahSurat> {
     );
   }
 
-  Widget _formpembuatSurat() {
+  Widget _formPembuatSurat() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -298,16 +423,19 @@ class _TambahSuratState extends State<TambahSurat> {
         ),
         const SizedBox(height: 10),
         DropdownSearch<String>(
-          popupProps: PopupProps.menu(
+          validator: (value) {
+            if (value == null) {
+              return "data tidak boleh kosong";
+            }
+            return null;
+          },
+          popupProps: const PopupProps.menu(
+            scrollbarProps:
+                ScrollbarProps(thumbVisibility: true, thumbColor: Colors.amber),
             showSelectedItems: true,
-            disabledItemFn: (String s) => s.startsWith('I'),
-            constraints: const BoxConstraints(maxHeight: 170),
+            constraints: BoxConstraints(maxHeight: 170),
           ),
-          items: const [
-            'Ayam',
-            'Sapi',
-            'Kambing',
-          ],
+          items: _pegawaiNames,
           clearButtonProps: const ClearButtonProps(isVisible: true),
           dropdownDecoratorProps: DropDownDecoratorProps(
             dropdownSearchDecoration: InputDecoration(
@@ -320,6 +448,9 @@ class _TambahSuratState extends State<TambahSurat> {
                   borderRadius: BorderRadius.all(Radius.circular(10))),
             ),
           ),
+          onChanged: (String? value) {
+            _pickPembuat('$value');
+          },
         ),
       ],
     );
@@ -346,6 +477,7 @@ class _TambahSuratState extends State<TambahSurat> {
             return null;
           },
           controller: lampiranTextController,
+          keyboardType: TextInputType.number,
           decoration: InputDecoration(
             border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -383,16 +515,19 @@ class _TambahSuratState extends State<TambahSurat> {
         ),
         const SizedBox(height: 10),
         DropdownSearch<String>(
-          popupProps: PopupProps.menu(
+          validator: (value) {
+            if (value == null) {
+              return "data tidak boleh kosong";
+            }
+            return null;
+          },
+          popupProps: const PopupProps.menu(
+            scrollbarProps:
+                ScrollbarProps(thumbVisibility: true, thumbColor: Colors.amber),
             showSelectedItems: true,
-            disabledItemFn: (String s) => s.startsWith('I'),
-            constraints: const BoxConstraints(maxHeight: 170),
+            constraints: BoxConstraints(maxHeight: 170),
           ),
-          items: const [
-            'Ayam',
-            'Sapi',
-            'Kambing',
-          ],
+          items: _kodeSuratCodes,
           clearButtonProps: const ClearButtonProps(isVisible: true),
           dropdownDecoratorProps: DropDownDecoratorProps(
             dropdownSearchDecoration: InputDecoration(
@@ -405,6 +540,9 @@ class _TambahSuratState extends State<TambahSurat> {
                   borderRadius: BorderRadius.all(Radius.circular(10))),
             ),
           ),
+          onChanged: (String? value) {
+            _pickKodeSurat('$value');
+          },
         ),
       ],
     );
@@ -415,7 +553,7 @@ class _TambahSuratState extends State<TambahSurat> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'File',
+          'File (.pdf/.jpg)',
           style: poppinsTextStyle.copyWith(
             fontSize: 10,
             fontWeight: semiBold,
@@ -433,12 +571,12 @@ class _TambahSuratState extends State<TambahSurat> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'file belum dipilih ...',
+                _fileName,
                 style: poppinsTextStyle.copyWith(
                     fontSize: 12, fontWeight: semiBold, color: grayColor),
               ),
               InkWell(
-                onTap: () {},
+                onTap: _pickFile,
                 child: Container(
                   padding:
                       const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
@@ -465,18 +603,18 @@ class _TambahSuratState extends State<TambahSurat> {
       height: 54,
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () {
-          if (_formState.currentState!.validate()) {}
-        },
+        onPressed: _validateForm,
         style: ElevatedButton.styleFrom(
             backgroundColor: primaryColor,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10))),
-        child: Text(
-          'Kirim',
-          style: poppinsTextStyle.copyWith(
-              fontSize: 16, fontWeight: semiBold, color: Colors.white),
-        ),
+        child: _isLoading
+            ? const CircularProgressIndicator()
+            : Text(
+                'Kirim',
+                style: poppinsTextStyle.copyWith(
+                    fontSize: 16, fontWeight: semiBold, color: Colors.white),
+              ),
       ),
     );
   }
@@ -521,16 +659,20 @@ class _TambahSuratState extends State<TambahSurat> {
                 const SizedBox(height: 15),
                 _formIsiSurat(),
                 const SizedBox(height: 15),
-                _formpembuatSurat(),
+                _pegawaiNames.isEmpty
+                    ? const CircularProgressIndicator()
+                    : _formPembuatSurat(),
                 const SizedBox(height: 15),
                 _formLampiranSurat(),
                 const SizedBox(height: 15),
-                _formKodeSurat(),
+                _kodeSuratCodes.isEmpty
+                    ? const CircularProgressIndicator()
+                    : _formKodeSurat(),
                 const SizedBox(height: 15),
                 _file(),
                 const SizedBox(height: 30),
                 _buttonKirim(),
-                const SizedBox(height: 15),
+                const SizedBox(height: 25),
               ],
             ),
           ),

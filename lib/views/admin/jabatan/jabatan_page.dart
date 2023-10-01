@@ -1,5 +1,5 @@
 import 'package:app_surat/theme.dart';
-import 'package:app_surat/views/petugas/navbar_petugas.dart';
+import 'package:app_surat/views/admin/navbar_admin.dart';
 import 'package:flutter/material.dart';
 
 class JabatanPage extends StatelessWidget {
@@ -71,7 +71,7 @@ class JabatanPage extends StatelessWidget {
           height: 25,
           child: ElevatedButton.icon(
             onPressed: () {
-              Navigator.pushNamed(context, '/tambah-kode-surat');
+              Navigator.pushNamed(context, '/tambah-jabatan');
             },
             icon: Icon(
               Icons.add,
@@ -148,7 +148,7 @@ class JabatanPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'SDKP/0/71/14/NOV',
+                  'admin',
                   style: poppinsTextStyle.copyWith(
                     fontSize: 15,
                     fontWeight: semiBold,
@@ -157,23 +157,12 @@ class JabatanPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 5),
                 Text(
-                  'NOTA DINAS',
+                  '1',
                   style: poppinsTextStyle.copyWith(
-                    fontSize: 11,
+                    fontSize: 30,
                     fontWeight: semiBold,
                     color: grayColor,
                   ),
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  'Laporan Hasil Analisis Kesenjangan Kinerja Pegawai Negeri Sipil',
-                  style: poppinsTextStyle.copyWith(
-                    fontSize: 11,
-                    fontWeight: medium,
-                    color: grayColor,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 11),
                 Row(
@@ -181,7 +170,7 @@ class JabatanPage extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () {
-                        Navigator.pushNamed(context, '/edit-kode-surat');
+                        Navigator.pushNamed(context, '/edit-jabatan');
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -250,7 +239,7 @@ class JabatanPage extends StatelessWidget {
                   ))),
         ),
       ),
-      drawer: const NavBar(),
+      drawer: const NavbarAdmin(),
       body: SizedBox(
         height: MediaQuery.of(context).size.height * 1.1,
         child: Padding(
