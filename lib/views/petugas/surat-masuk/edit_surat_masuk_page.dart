@@ -143,14 +143,10 @@ class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
           'pegawai_id': int.parse(pembuatTextController.text)
       });
 
-      print(suratData.fields);
-      print(widget.suratMasuk!.id);
-
       final Response response = await SuratMasukService()
           .patchSuratMasuk(suratData, widget.suratMasuk!.id);
 
       if (response.statusCode == 200) {
-        print(response.data);
         if (context.mounted) {
           Navigator.pushReplacementNamed(context, '/surat-masuk');
           SnackBarService().showSnackBar(response.data['message'], context);
@@ -171,7 +167,6 @@ class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
         _isLoading = false;
       });
     } catch (e) {
-      print(e);
       setState(() {
         _isLoading = false;
       });

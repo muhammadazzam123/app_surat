@@ -15,7 +15,9 @@ class SuratMasukPage extends StatefulWidget {
 }
 
 class _SuratMasukPageState extends State<SuratMasukPage> {
-  late Future<List<SuratMasuk>> _suratMasuks;
+  TextEditingController _searchTextController = TextEditingController();
+  late List<SuratMasuk> _suratMasuks;
+  List<SuratMasuk> _filteredSuratMasuks = [];
   bool _isLoading = false;
 
   @override
@@ -24,9 +26,14 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
     _getSuratMasuks();
   }
 
-  void _getSuratMasuks() {
+  void _getSuratMasuks() async {
     setState(() {
-      _suratMasuks = SuratMasukService().getSuratMasuks();
+      _isLoading = true;
+    });
+    _suratMasuks = await SuratMasukService().getSuratMasuks();
+    _filteredSuratMasuks = _suratMasuks;
+    setState(() {
+      _isLoading = false;
     });
   }
 
@@ -59,6 +66,15 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
         SnackBarService().showSnackBar('e', context);
       }
     }
+  }
+
+  void _searchSuratMasuk(String text) {
+    setState(() {
+      _filteredSuratMasuks = _suratMasuks
+          .where((element) =>
+              element.perihalindex!.toLowerCase().contains(text.toLowerCase()))
+          .toList();
+    });
   }
 
   Future<void> _showMyDialog(BuildContext context, int? suratMasukId) async {
@@ -164,6 +180,10 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
     return SizedBox(
       height: 50,
       child: TextFormField(
+        onChanged: (String value) {
+          _searchSuratMasuk(value);
+        },
+        controller: _searchTextController,
         decoration: InputDecoration(
           prefixIcon: Icon(
             Icons.search_outlined,
@@ -192,152 +212,140 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
   }
 
   Widget _listData() {
-    return FutureBuilder(
-        future: _suratMasuks,
-        builder: (contex, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else if (snapshot.hasData) {
-            return Flexible(
-              child: RefreshIndicator(
-                onRefresh: () {
-                  return Future.delayed(
-                      const Duration(seconds: 1), _getSuratMasuks);
-                },
-                child: ListView.builder(
-                  physics: const AlwaysScrollableScrollPhysics(
-                      parent: BouncingScrollPhysics()),
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.only(bottom: defaultMargin2),
-                      padding: EdgeInsets.symmetric(
-                          vertical: 10, horizontal: defaultMargin2),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: whiteColor,
-                        boxShadow: [defaultShadow],
+    return Flexible(
+      child: RefreshIndicator(
+        onRefresh: () {
+          return Future.delayed(const Duration(seconds: 1), () {
+            _getSuratMasuks();
+          });
+        },
+        child: ListView.builder(
+          physics: const AlwaysScrollableScrollPhysics(
+              parent: BouncingScrollPhysics()),
+          itemCount: _filteredSuratMasuks.length,
+          itemBuilder: (context, index) {
+            return Container(
+              margin: EdgeInsets.only(bottom: defaultMargin2),
+              padding: EdgeInsets.symmetric(
+                  vertical: 10, horizontal: defaultMargin2),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: whiteColor,
+                boxShadow: [defaultShadow],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${_filteredSuratMasuks[index].perihalindex}',
+                    style: poppinsTextStyle.copyWith(
+                      fontSize: 15,
+                      fontWeight: semiBold,
+                      color: blackColor,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    '${_filteredSuratMasuks[index].noSurat}',
+                    style: poppinsTextStyle.copyWith(
+                      fontSize: 11,
+                      fontWeight: semiBold,
+                      color: grayColor,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    '${_filteredSuratMasuks[index].isiSurat}',
+                    style: poppinsTextStyle.copyWith(
+                      fontSize: 11,
+                      fontWeight: medium,
+                      color: grayColor,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 11),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/detail-surat-masuk',
+                              arguments: _filteredSuratMasuks[index]);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 3, horizontal: 13),
+                          decoration: BoxDecoration(
+                            color: color1,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Text(
+                            'Detail',
+                            style: poppinsTextStyle.copyWith(
+                                fontSize: 11,
+                                fontWeight: semiBold,
+                                color: whiteColor),
+                          ),
+                        ),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${snapshot.data![index].perihalindex}',
-                            style: poppinsTextStyle.copyWith(
-                              fontSize: 15,
-                              fontWeight: semiBold,
-                              color: blackColor,
-                            ),
+                      const SizedBox(width: 6),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EditSuratMasukPage(
+                                      suratMasuk:
+                                          _filteredSuratMasuks[index])));
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 3, horizontal: 13),
+                          decoration: BoxDecoration(
+                            color: color3,
+                            borderRadius: BorderRadius.circular(5),
                           ),
-                          const SizedBox(height: 5),
-                          Text(
-                            '${snapshot.data![index].noSurat}',
+                          child: Text(
+                            'Edit',
                             style: poppinsTextStyle.copyWith(
-                              fontSize: 11,
-                              fontWeight: semiBold,
-                              color: grayColor,
-                            ),
+                                fontSize: 11,
+                                fontWeight: semiBold,
+                                color: whiteColor),
                           ),
-                          const SizedBox(height: 5),
-                          Text(
-                            '${snapshot.data![index].isiSurat}',
-                            style: poppinsTextStyle.copyWith(
-                              fontSize: 11,
-                              fontWeight: medium,
-                              color: grayColor,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 11),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                      context, '/detail-surat-masuk',
-                                      arguments: snapshot.data![index]);
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 3, horizontal: 13),
-                                  decoration: BoxDecoration(
-                                    color: color1,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: Text(
-                                    'Detail',
-                                    style: poppinsTextStyle.copyWith(
-                                        fontSize: 11,
-                                        fontWeight: semiBold,
-                                        color: whiteColor),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 6),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              EditSuratMasukPage(
-                                                  suratMasuk:
-                                                      snapshot.data![index])));
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 3, horizontal: 13),
-                                  decoration: BoxDecoration(
-                                    color: color3,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: Text(
-                                    'Edit',
-                                    style: poppinsTextStyle.copyWith(
-                                        fontSize: 11,
-                                        fontWeight: semiBold,
-                                        color: whiteColor),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 6),
-                              InkWell(
-                                onTap: () {
-                                  _showMyDialog(
-                                      context, snapshot.data![index].id);
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 3, horizontal: 13),
-                                  decoration: BoxDecoration(
-                                    color: color4,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: Text(
-                                    'Hapus',
-                                    style: poppinsTextStyle.copyWith(
-                                        fontSize: 11,
-                                        fontWeight: semiBold,
-                                        color: whiteColor),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
+                        ),
                       ),
-                    );
-                  },
-                ),
+                      const SizedBox(width: 6),
+                      InkWell(
+                        onTap: () {
+                          _showMyDialog(
+                              context, _filteredSuratMasuks[index].id);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 3, horizontal: 13),
+                          decoration: BoxDecoration(
+                            color: color4,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Text(
+                            'Hapus',
+                            style: poppinsTextStyle.copyWith(
+                                fontSize: 11,
+                                fontWeight: semiBold,
+                                color: whiteColor),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
               ),
             );
-          }
-          return const Text('Terjadi kesalahan. Cobalah beberapa saat lagi.');
-        });
+          },
+        ),
+      ),
+    );
   }
 
   @override
@@ -371,7 +379,7 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
               const SizedBox(height: 12),
               _columnSearch(),
               const SizedBox(height: 27),
-              _listData(),
+              _isLoading ? const CircularProgressIndicator() : _listData(),
             ],
           ),
         ),
