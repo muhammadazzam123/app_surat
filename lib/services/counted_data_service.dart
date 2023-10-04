@@ -16,7 +16,8 @@ class CountedDataService {
           options: Options(headers: {"Authorization": 'Bearer $token'}));
       return CountedDataPetugas.fromJson(response.data);
     } on DioException catch (e) {
-      throw Exception(e.message);
+      throw Exception(e.copyWith(
+          message: "Kesalahan pada server. Cobalah beberapa saat lagi"));
     }
   }
 }

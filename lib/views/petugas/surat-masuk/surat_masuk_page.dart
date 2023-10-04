@@ -15,7 +15,7 @@ class SuratMasukPage extends StatefulWidget {
 }
 
 class _SuratMasukPageState extends State<SuratMasukPage> {
-  TextEditingController _searchTextController = TextEditingController();
+  TextEditingController searchTextController = TextEditingController();
   late List<SuratMasuk> _suratMasuks;
   List<SuratMasuk> _filteredSuratMasuks = [];
   bool _isLoading = false;
@@ -183,7 +183,7 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
         onChanged: (String value) {
           _searchSuratMasuk(value);
         },
-        controller: _searchTextController,
+        controller: searchTextController,
         decoration: InputDecoration(
           prefixIcon: Icon(
             Icons.search_outlined,

@@ -130,6 +130,73 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _listMenu() {
+    return Flexible(
+      child: RefreshIndicator(
+        onRefresh: () {
+          return Future.delayed(const Duration(seconds: 1), _getCountedData);
+        },
+        child: FutureBuilder(
+            future: _countedDataPetugas,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else if (snapshot.hasData) {
+                final countedData = snapshot.data;
+                return ListView(
+                  physics: const AlwaysScrollableScrollPhysics(
+                      parent: BouncingScrollPhysics()),
+                  children: [
+                    InkWell(
+                      child: ListContainer(
+                          color1,
+                          Image.asset('assets/masuk.png', width: 85),
+                          'Surat Masuk',
+                          countedData!.suratMasuks!),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/surat-masuk');
+                      },
+                    ),
+                    InkWell(
+                      child: ListContainer(
+                          color2,
+                          Image.asset('assets/keluar.png', width: 85),
+                          'Surat keluar',
+                          countedData.suratKeluars!),
+                      onTap: () {},
+                    ),
+                    InkWell(
+                      child: ListContainer(
+                          color3,
+                          Image.asset('assets/kode.png', width: 85),
+                          'Kode Surat',
+                          countedData.kodeSurats!),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/kode-surat');
+                      },
+                    ),
+                    InkWell(
+                      child: ListContainer(
+                          color4,
+                          Image.asset('assets/agenda.png', width: 85),
+                          'Agenda',
+                          countedData.agendaUndangans!),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/agenda');
+                      },
+                    ),
+                  ],
+                );
+              }
+              return const Text(
+                  'Terjadi kesalahan. Cobalah beberapa saat lagi.');
+            }),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -167,69 +234,13 @@ class _HomePageState extends State<HomePage> {
       drawer: const NavBar(),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: defaultMargin1),
-        child: RefreshIndicator(
-          onRefresh: () {
-            return Future.delayed(const Duration(seconds: 1), _getCountedData);
-          },
-          child: FutureBuilder(
-              future: _countedDataPetugas,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else if (snapshot.hasData) {
-                  final countedData = snapshot.data;
-                  return ListView(
-                    physics: const AlwaysScrollableScrollPhysics(
-                        parent: BouncingScrollPhysics()),
-                    children: [
-                      _title(),
-                      SizedBox(height: defaultMargin2),
-                      InkWell(
-                        child: ListContainer(
-                            color1,
-                            Image.asset('assets/masuk.png', width: 85),
-                            'Surat Masuk',
-                            countedData!.suratMasuks!),
-                        onTap: () {
-                          Navigator.pushNamed(context, '/surat-masuk');
-                        },
-                      ),
-                      InkWell(
-                        child: ListContainer(
-                            color2,
-                            Image.asset('assets/keluar.png', width: 85),
-                            'Surat keluar',
-                            countedData.suratKeluars!),
-                        onTap: () {},
-                      ),
-                      InkWell(
-                        child: ListContainer(
-                            color3,
-                            Image.asset('assets/kode.png', width: 85),
-                            'Kode Surat',
-                            countedData.kodeSurats!),
-                        onTap: () {
-                          Navigator.pushNamed(context, '/kode-surat');
-                        },
-                      ),
-                      InkWell(
-                        child: ListContainer(
-                            color4,
-                            Image.asset('assets/agenda.png', width: 85),
-                            'Agenda',
-                            countedData.agendaUndangans!),
-                        onTap: () {
-                          Navigator.pushNamed(context, '/agenda');
-                        },
-                      ),
-                    ],
-                  );
-                }
-                return const Text(
-                    'Terjadi kesalahan. Cobalah beberapa saat lagi.');
-              }),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _title(),
+            SizedBox(height: defaultMargin2),
+            _listMenu(),
+          ],
         ),
       ),
     );
