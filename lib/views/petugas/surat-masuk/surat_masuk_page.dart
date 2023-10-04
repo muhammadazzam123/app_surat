@@ -43,7 +43,7 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
         _isLoading = true;
       });
       final Response response =
-          await SuratMasukService().deleteSuratMasuk(suratMasukId);
+          await SuratMasukService().deleteSuratMasuk(suratMasukId!);
 
       if (response.statusCode == 200) {
         _getSuratMasuks();

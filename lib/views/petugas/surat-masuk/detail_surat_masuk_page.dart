@@ -1,9 +1,32 @@
+import 'dart:io';
+
 import 'package:app_surat/models/surat_masuk_model.dart';
+import 'package:app_surat/services/snackbar_service.dart';
+import 'package:app_surat/services/surat_masuk_service.dart';
 import 'package:app_surat/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class DetailSuratMasukPage extends StatelessWidget {
   const DetailSuratMasukPage({super.key});
+
+  checkFilePermission(int suratMasukId, suratMasukFileName, context) async {
+    final Directory? directory = await getExternalStorageDirectory();
+    if (await Permission.storage.isGranted) {
+      final res = await SuratMasukService().downloadSuratMasuk(suratMasukId,
+          '${directory!.path}/Media/${DateTime.now()}$suratMasukFileName');
+
+      if (res == 'OK') {
+        SnackBarService().showSnackBar('Berkas berhasil diunduh', context);
+      } else {
+        SnackBarService().showSnackBar(
+            'Gagal mengunduh berkas. Cobalah beberapa saat lagi.', context);
+      }
+    } else {
+      return Permission.storage.request();
+    }
+  }
 
   Widget _title() {
     return Container(
@@ -16,7 +39,7 @@ class DetailSuratMasukPage extends StatelessWidget {
     );
   }
 
-  Widget _body(SuratMasuk suratMasuk) {
+  Widget _body(SuratMasuk suratMasuk, context) {
     return Container(
       alignment: Alignment.topLeft,
       child: Column(
@@ -108,7 +131,9 @@ class DetailSuratMasukPage extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              checkFilePermission(suratMasuk.id!, suratMasuk.fileSm, context);
+            },
             child: Container(
               width: 95,
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 27),
@@ -165,7 +190,7 @@ class DetailSuratMasukPage extends StatelessWidget {
             children: [
               _title(),
               const SizedBox(height: 25),
-              _body(args),
+              _body(args, context),
             ],
           ),
         ),

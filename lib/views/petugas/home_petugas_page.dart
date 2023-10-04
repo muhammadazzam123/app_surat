@@ -163,7 +163,7 @@ class _HomePageState extends State<HomePage> {
                       child: ListContainer(
                           color2,
                           Image.asset('assets/keluar.png', width: 85),
-                          'Surat keluar',
+                          'Surat Keluar',
                           countedData.suratKeluars!),
                       onTap: () {},
                     ),

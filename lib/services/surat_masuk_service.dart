@@ -51,7 +51,7 @@ class SuratMasukService {
     }
   }
 
-  Future deleteSuratMasuk(int? suratMasukId) async {
+  Future deleteSuratMasuk(int suratMasukId) async {
     try {
       final String fullUri = '$_apiUri/v1/surat-masuks/$suratMasukId';
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -61,6 +61,20 @@ class SuratMasukService {
       return response;
     } on DioException catch (e) {
       return e.response;
+    }
+  }
+
+  Future downloadSuratMasuk(int suratMasukId, savePath) async {
+    try {
+      print(savePath);
+      final String fullUri = '$_apiUri/v1/surat-masuks/file/$suratMasukId';
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString('appToken').toString();
+      Response response = await _dio.download(fullUri, savePath,
+          options: Options(headers: {"Authorization": 'Bearer $token'}));
+      return response.statusMessage;
+    } on DioException catch (e) {
+      throw Exception('Error : ${e.response!.statusMessage}');
     }
   }
 }
