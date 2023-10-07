@@ -165,7 +165,9 @@ class _HomePageState extends State<HomePage> {
                           Image.asset('assets/keluar.png', width: 85),
                           'Surat Keluar',
                           countedData.suratKeluars!),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, '/surat-keluar');
+                      },
                     ),
                     InkWell(
                       child: ListContainer(

@@ -1,52 +1,52 @@
-import 'package:app_surat/models/surat_masuk_model.dart';
+import 'package:app_surat/models/surat_keluar_model.dart';
 import 'package:app_surat/services/snackbar_service.dart';
-import 'package:app_surat/services/surat_masuk_service.dart';
+import 'package:app_surat/services/surat_keluar_service.dart';
 import 'package:app_surat/theme.dart';
 import 'package:app_surat/views/petugas/navbar_petugas.dart';
-import 'package:app_surat/views/petugas/surat-masuk/edit_surat_masuk_page.dart';
+import 'package:app_surat/views/petugas/surat-keluar/surat_keluar_edit_page.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-class SuratMasukPage extends StatefulWidget {
-  const SuratMasukPage({super.key});
+class SuratKeluarPage extends StatefulWidget {
+  const SuratKeluarPage({super.key});
 
   @override
-  State<SuratMasukPage> createState() => _SuratMasukPageState();
+  State<SuratKeluarPage> createState() => _SuratKeluarPageState();
 }
 
-class _SuratMasukPageState extends State<SuratMasukPage> {
+class _SuratKeluarPageState extends State<SuratKeluarPage> {
   TextEditingController searchTextController = TextEditingController();
-  late List<SuratMasuk> _suratMasuks;
-  List<SuratMasuk> _filteredSuratMasuks = [];
+  late List<SuratKeluar> _suratKeluars;
+  List<SuratKeluar> _filteredSuratKeluars = [];
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _getSuratMasuks();
+    _getSuratKeluars();
   }
 
-  void _getSuratMasuks() async {
+  void _getSuratKeluars() async {
     setState(() {
       _isLoading = true;
     });
-    _suratMasuks = await SuratMasukService().getSuratMasuks();
-    _filteredSuratMasuks = _suratMasuks;
+    _suratKeluars = await SuratKeluarService().getSuratKeluars();
+    _filteredSuratKeluars = _suratKeluars;
     setState(() {
       _isLoading = false;
     });
   }
 
-  void _deleteSuratMasuk(int? suratMasukId) async {
+  void _deleteSuratKeluar(int? suratKeluarId) async {
     try {
       setState(() {
         _isLoading = true;
       });
       final Response response =
-          await SuratMasukService().deleteSuratMasuk(suratMasukId!);
+          await SuratKeluarService().deleteSuratKeluar(suratKeluarId!);
 
       if (response.statusCode == 200) {
-        _getSuratMasuks();
+        _getSuratKeluars();
         if (mounted) {
           Navigator.pop(context);
           SnackBarService()
@@ -68,16 +68,17 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
     }
   }
 
-  void _searchSuratMasuk(String text) {
+  void _searchSuratKeluar(String text) {
     setState(() {
-      _filteredSuratMasuks = _suratMasuks
-          .where((element) =>
-              element.perihalindex!.toLowerCase().contains(text.toLowerCase()))
+      _filteredSuratKeluars = _suratKeluars
+          .where((element) => element.perihalindexSk!
+              .toLowerCase()
+              .contains(text.toLowerCase()))
           .toList();
     });
   }
 
-  Future<void> _showMyDialog(BuildContext context, int? suratMasukId) async {
+  Future<void> _showMyDialog(BuildContext context, int? suratKeluarId) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -117,7 +118,7 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
               style: ButtonStyle(
                   backgroundColor: MaterialStatePropertyAll(color4)),
               onPressed: () {
-                _deleteSuratMasuk(suratMasukId);
+                _deleteSuratKeluar(suratKeluarId);
               },
               child: _isLoading
                   ? const CircularProgressIndicator(color: Colors.white)
@@ -137,7 +138,7 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
     return Row(
       children: [
         Text(
-          'Surat Masuk',
+          'Surat Keluar',
           style: poppinsTextStyle.copyWith(
             fontSize: 26,
             fontWeight: semiBold,
@@ -149,7 +150,7 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
           height: 25,
           child: ElevatedButton.icon(
             onPressed: () {
-              Navigator.pushNamed(context, '/tambah-surat-masuk');
+              Navigator.pushNamed(context, '/tambah-surat-keluar');
             },
             icon: Icon(
               Icons.add,
@@ -181,7 +182,7 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
       height: 50,
       child: TextFormField(
         onChanged: (String value) {
-          _searchSuratMasuk(value);
+          _searchSuratKeluar(value);
         },
         controller: searchTextController,
         decoration: InputDecoration(
@@ -216,13 +217,13 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
       child: RefreshIndicator(
         onRefresh: () {
           return Future.delayed(const Duration(seconds: 1), () {
-            _getSuratMasuks();
+            _getSuratKeluars();
           });
         },
         child: ListView.builder(
           physics: const AlwaysScrollableScrollPhysics(
               parent: BouncingScrollPhysics()),
-          itemCount: _filteredSuratMasuks.length,
+          itemCount: _filteredSuratKeluars.length,
           itemBuilder: (context, index) {
             return Container(
               margin: EdgeInsets.only(bottom: defaultMargin2),
@@ -237,7 +238,7 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${_filteredSuratMasuks[index].perihalindex}',
+                    '${_filteredSuratKeluars[index].perihalindexSk}',
                     style: poppinsTextStyle.copyWith(
                       fontSize: 15,
                       fontWeight: semiBold,
@@ -246,7 +247,7 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    '${_filteredSuratMasuks[index].noSurat}',
+                    '${_filteredSuratKeluars[index].noSurat}',
                     style: poppinsTextStyle.copyWith(
                       fontSize: 11,
                       fontWeight: semiBold,
@@ -255,7 +256,7 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    '${_filteredSuratMasuks[index].isiSurat}',
+                    '${_filteredSuratKeluars[index].isiRingkas}',
                     style: poppinsTextStyle.copyWith(
                       fontSize: 11,
                       fontWeight: medium,
@@ -270,8 +271,8 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
                     children: [
                       InkWell(
                         onTap: () {
-                          Navigator.pushNamed(context, '/detail-surat-masuk',
-                              arguments: _filteredSuratMasuks[index]);
+                          Navigator.pushNamed(context, '/detail-surat-keluar',
+                              arguments: _filteredSuratKeluars[index]);
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(
@@ -295,9 +296,9 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => EditSuratMasukPage(
-                                      suratMasuk:
-                                          _filteredSuratMasuks[index])));
+                                  builder: (context) => SuratKeluarEditPage(
+                                      suratKeluar:
+                                          _filteredSuratKeluars[index])));
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(
@@ -319,7 +320,7 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
                       InkWell(
                         onTap: () {
                           _showMyDialog(
-                              context, _filteredSuratMasuks[index].id);
+                              context, _filteredSuratKeluars[index].id);
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(
