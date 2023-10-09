@@ -15,12 +15,13 @@ import 'package:app_surat/views/petugas/agenda/detail_agenda.dart';
 import 'package:app_surat/views/petugas/agenda/edit_agenda.dart';
 import 'package:app_surat/views/petugas/agenda/tambah_agenda.dart';
 import 'package:app_surat/views/petugas/home_petugas_page.dart';
-import 'package:app_surat/views/petugas/kodesurat/edit_kode_surat.dart';
-import 'package:app_surat/views/petugas/kodesurat/kodesurat.dart';
-import 'package:app_surat/views/petugas/kodesurat/tambah_kode_surat.dart';
+import 'package:app_surat/views/petugas/kodesurat/kode_surat_page.dart';
+import 'package:app_surat/views/petugas/kodesurat/kode_surat_tambah_page.dart';
+import 'package:app_surat/views/petugas/surat-keluar/surat_keluar_detail_page.dart';
+import 'package:app_surat/views/petugas/surat-keluar/surat_keluar_page.dart';
+import 'package:app_surat/views/petugas/surat-keluar/surat_keluar_tambah_page.dart';
 import 'package:app_surat/views/petugas/surat-masuk/detail_surat_masuk_page.dart';
 import 'package:app_surat/views/petugas/surat-masuk/edit_surat_masuk_page.dart';
-import 'package:app_surat/views/petugas/surat-keluar/surat_keluar_page.dart';
 import 'package:app_surat/views/petugas/surat-masuk/surat_masuk_page.dart';
 import 'package:app_surat/views/petugas/surat-masuk/tambah_surat_masuk_page.dart';
 import 'package:app_surat/views/pimpinan/disposisi_page.dart';
@@ -62,9 +63,10 @@ class MyApp extends StatelessWidget {
         '/tambah-surat-masuk': (context) => const TambahSuratMasukPage(),
         '/edit-surat-masuk': (context) => const EditSuratMasukPage(),
         '/surat-keluar': (context) => const SuratKeluarPage(),
+        '/surat-keluar/tambah': (context) => const SuratKeluarTambahPage(),
+        '/surat-keluar/detail': (context) => const SuratKeluarDetailPage(),
         '/kode-surat': (context) => const KodeSuratPage(),
-        '/tambah-kode-surat': (context) => const TambahKodeSurat(),
-        '/edit-kode-surat': (context) => const EditKodeSurat(),
+        '/tambah-kode-surat': (context) => const KodeSuratTambahPage(),
         '/agenda': (context) => const AgendaSurat(),
         '/detail-agenda': (context) => const DetailAgenda(),
         '/tambah-agenda': (context) => const TambahAgenda(),

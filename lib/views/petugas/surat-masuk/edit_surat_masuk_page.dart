@@ -123,24 +123,17 @@ class _EditSuratMasukPageState extends State<EditSuratMasukPage> {
       });
 
       FormData suratData = FormData.fromMap({
-        if (isiTextController.text != '') 'isi_surat': isiTextController.text,
-        if (perihalTextController.text != '')
-          'perihalindex': perihalTextController.text,
-        if (lampiranTextController.text != '')
-          'lampiran': lampiranTextController.text,
-        if (nomorTextController.text != '')
-          'no_surat': nomorTextController.text,
-        if (tanggalController.text != '')
-          'tgl_masuk': dateFormat.parse(tanggalController.text),
+        'isi_surat': isiTextController.text,
+        'perihalindex': perihalTextController.text,
+        'lampiran': lampiranTextController.text,
+        'no_surat': nomorTextController.text,
+        'tgl_masuk': dateFormat.parse(tanggalController.text),
         if (_suratFile != null)
           'file': await MultipartFile.fromFile(_suratFile!.path,
               filename: _fileName),
-        if (asalTextController.text != '')
-          'asal_surat': asalTextController.text,
-        if (kodeTextController.text != '')
-          'kode_surat_id': int.parse(kodeTextController.text),
-        if (pembuatTextController.text != '')
-          'pegawai_id': int.parse(pembuatTextController.text)
+        'asal_surat': asalTextController.text,
+        'kode_surat_id': int.parse(kodeTextController.text),
+        'pegawai_id': int.parse(pembuatTextController.text)
       });
 
       final Response response = await SuratMasukService()

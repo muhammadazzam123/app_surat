@@ -1,52 +1,52 @@
-import 'package:app_surat/models/surat_keluar_model.dart';
+import 'package:app_surat/models/kode_surat_model.dart';
+import 'package:app_surat/services/kode_surat_service.dart';
 import 'package:app_surat/services/snackbar_service.dart';
-import 'package:app_surat/services/surat_keluar_service.dart';
 import 'package:app_surat/theme.dart';
+import 'package:app_surat/views/petugas/kodesurat/kode_surat_edit_page.dart';
 import 'package:app_surat/views/petugas/navbar_petugas.dart';
-import 'package:app_surat/views/petugas/surat-keluar/surat_keluar_edit_page.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-class SuratKeluarPage extends StatefulWidget {
-  const SuratKeluarPage({super.key});
+class KodeSuratPage extends StatefulWidget {
+  const KodeSuratPage({super.key});
 
   @override
-  State<SuratKeluarPage> createState() => _SuratKeluarPageState();
+  State<KodeSuratPage> createState() => _KodeSuratPageState();
 }
 
-class _SuratKeluarPageState extends State<SuratKeluarPage> {
+class _KodeSuratPageState extends State<KodeSuratPage> {
   TextEditingController searchTextController = TextEditingController();
-  late List<SuratKeluar> _suratKeluars;
-  List<SuratKeluar> _filteredSuratKeluars = [];
+  late List<KodeSurat> _kodeSurats;
+  List<KodeSurat> _filteredKodeSurats = [];
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _getSuratKeluars();
+    _getKodeSurats();
   }
 
-  void _getSuratKeluars() async {
+  void _getKodeSurats() async {
     setState(() {
       _isLoading = true;
     });
-    _suratKeluars = await SuratKeluarService().getSuratKeluars();
-    _filteredSuratKeluars = _suratKeluars;
+    _kodeSurats = await KodeSuratService().getKodeSurats();
+    _filteredKodeSurats = _kodeSurats;
     setState(() {
       _isLoading = false;
     });
   }
 
-  void _deleteSuratKeluar(int? suratKeluarId) async {
+  void _deleteKodeSurat(int? kodeSuratId) async {
     try {
       setState(() {
         _isLoading = true;
       });
       final Response response =
-          await SuratKeluarService().deleteSuratKeluar(suratKeluarId!);
+          await KodeSuratService().deleteKodeSurat(kodeSuratId!);
 
       if (response.statusCode == 200) {
-        _getSuratKeluars();
+        _getKodeSurats();
         if (mounted) {
           Navigator.pop(context);
           SnackBarService()
@@ -68,17 +68,16 @@ class _SuratKeluarPageState extends State<SuratKeluarPage> {
     }
   }
 
-  void _searchSuratKeluar(String text) {
+  void _searchKodeSurat(String text) {
     setState(() {
-      _filteredSuratKeluars = _suratKeluars
-          .where((element) => element.perihalindexSk!
-              .toLowerCase()
-              .contains(text.toLowerCase()))
+      _filteredKodeSurats = _kodeSurats
+          .where((element) =>
+              element.namaKode!.toLowerCase().contains(text.toLowerCase()))
           .toList();
     });
   }
 
-  Future<void> _showMyDialog(BuildContext context, int? suratKeluarId) async {
+  Future<void> _showMyDialog(BuildContext context, int kodeSuratId) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -90,7 +89,7 @@ class _SuratKeluarPageState extends State<SuratKeluarPage> {
             child: ListBody(
               children: <Widget>[
                 Text(
-                  'Apakah Anda yakin ingin menghapus data surat ini?',
+                  'Apakah Anda yakin ingin menghapus kode surat ini?',
                   style: poppinsTextStyle.copyWith(
                     fontSize: 14,
                     fontWeight: semiBold,
@@ -118,15 +117,11 @@ class _SuratKeluarPageState extends State<SuratKeluarPage> {
               style: ButtonStyle(
                   backgroundColor: MaterialStatePropertyAll(color4)),
               onPressed: () {
-                _deleteSuratKeluar(suratKeluarId);
+                _deleteKodeSurat(kodeSuratId);
               },
-              child: _isLoading
-                  ? const CircularProgressIndicator(color: Colors.white)
-                  : Text('Hapus',
-                      style: poppinsTextStyle.copyWith(
-                          fontSize: 12,
-                          fontWeight: semiBold,
-                          color: whiteColor)),
+              child: Text('Hapus',
+                  style: poppinsTextStyle.copyWith(
+                      fontSize: 12, fontWeight: semiBold, color: whiteColor)),
             ),
           ],
         );
@@ -138,7 +133,7 @@ class _SuratKeluarPageState extends State<SuratKeluarPage> {
     return Row(
       children: [
         Text(
-          'Surat Keluar',
+          'Kode Surat',
           style: poppinsTextStyle.copyWith(
             fontSize: 26,
             fontWeight: semiBold,
@@ -150,7 +145,7 @@ class _SuratKeluarPageState extends State<SuratKeluarPage> {
           height: 25,
           child: ElevatedButton.icon(
             onPressed: () {
-              Navigator.pushNamed(context, '/surat-keluar/tambah');
+              Navigator.pushNamed(context, '/kode-surat/tambah');
             },
             icon: Icon(
               Icons.add,
@@ -177,13 +172,11 @@ class _SuratKeluarPageState extends State<SuratKeluarPage> {
     );
   }
 
-  Widget _columnSearch() {
+  Widget _columnSerach() {
     return SizedBox(
       height: 50,
       child: TextFormField(
-        onChanged: (String value) {
-          _searchSuratKeluar(value);
-        },
+        onChanged: (String value) => _searchKodeSurat(value),
         controller: searchTextController,
         decoration: InputDecoration(
           prefixIcon: Icon(
@@ -198,7 +191,7 @@ class _SuratKeluarPageState extends State<SuratKeluarPage> {
               borderSide: BorderSide(color: primaryColor)),
           floatingLabelBehavior: FloatingLabelBehavior.never,
           label: Text(
-            'Cari surat ...',
+            'Cari kode surat ...',
             style: poppinsTextStyle.copyWith(
               fontSize: 12,
               fontWeight: medium,
@@ -217,13 +210,13 @@ class _SuratKeluarPageState extends State<SuratKeluarPage> {
       child: RefreshIndicator(
         onRefresh: () {
           return Future.delayed(const Duration(seconds: 1), () {
-            _getSuratKeluars();
+            _getKodeSurats();
           });
         },
         child: ListView.builder(
           physics: const AlwaysScrollableScrollPhysics(
               parent: BouncingScrollPhysics()),
-          itemCount: _filteredSuratKeluars.length,
+          itemCount: _filteredKodeSurats.length,
           itemBuilder: (context, index) {
             return Container(
               margin: EdgeInsets.only(bottom: defaultMargin2),
@@ -238,7 +231,7 @@ class _SuratKeluarPageState extends State<SuratKeluarPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${_filteredSuratKeluars[index].perihalindexSk}',
+                    '${_filteredKodeSurats[index].kode}',
                     style: poppinsTextStyle.copyWith(
                       fontSize: 15,
                       fontWeight: semiBold,
@@ -247,7 +240,7 @@ class _SuratKeluarPageState extends State<SuratKeluarPage> {
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    '${_filteredSuratKeluars[index].noSurat}',
+                    '${_filteredKodeSurats[index].namaKode}',
                     style: poppinsTextStyle.copyWith(
                       fontSize: 11,
                       fontWeight: semiBold,
@@ -256,7 +249,7 @@ class _SuratKeluarPageState extends State<SuratKeluarPage> {
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    '${_filteredSuratKeluars[index].isiRingkas}',
+                    '${_filteredKodeSurats[index].keterangan}',
                     style: poppinsTextStyle.copyWith(
                       fontSize: 11,
                       fontWeight: medium,
@@ -271,34 +264,11 @@ class _SuratKeluarPageState extends State<SuratKeluarPage> {
                     children: [
                       InkWell(
                         onTap: () {
-                          Navigator.pushNamed(context, '/surat-keluar-detail',
-                              arguments: _filteredSuratKeluars[index]);
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 3, horizontal: 13),
-                          decoration: BoxDecoration(
-                            color: color1,
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Text(
-                            'Detail',
-                            style: poppinsTextStyle.copyWith(
-                                fontSize: 11,
-                                fontWeight: semiBold,
-                                color: whiteColor),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      InkWell(
-                        onTap: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => SuratKeluarEditPage(
-                                      suratKeluar:
-                                          _filteredSuratKeluars[index])));
+                                  builder: (context) => KodeSuratEditPage(
+                                      kodeSurat: _filteredKodeSurats[index])));
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(
@@ -320,7 +290,7 @@ class _SuratKeluarPageState extends State<SuratKeluarPage> {
                       InkWell(
                         onTap: () {
                           _showMyDialog(
-                              context, _filteredSuratKeluars[index].id);
+                              context, _filteredKodeSurats[index].id!);
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(
@@ -378,7 +348,7 @@ class _SuratKeluarPageState extends State<SuratKeluarPage> {
             children: [
               _title(context),
               const SizedBox(height: 12),
-              _columnSearch(),
+              _columnSerach(),
               const SizedBox(height: 27),
               _isLoading ? const CircularProgressIndicator() : _listData(),
             ],

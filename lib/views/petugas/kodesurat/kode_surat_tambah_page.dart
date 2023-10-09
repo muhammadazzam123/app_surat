@@ -1,17 +1,68 @@
+import 'package:app_surat/services/kode_surat_service.dart';
+import 'package:app_surat/services/snackbar_service.dart';
 import 'package:app_surat/theme.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-class TambahKodeSurat extends StatefulWidget {
-  const TambahKodeSurat({super.key});
+class KodeSuratTambahPage extends StatefulWidget {
+  const KodeSuratTambahPage({super.key});
 
   @override
-  State<TambahKodeSurat> createState() => _TambahKodeSuratState();
+  State<KodeSuratTambahPage> createState() => _KodeSuratTambahPageState();
 }
 
-class _TambahKodeSuratState extends State<TambahKodeSurat> {
-  TextEditingController nomorTextController = TextEditingController();
-  TextEditingController asalTextController = TextEditingController();
+class _KodeSuratTambahPageState extends State<KodeSuratTambahPage> {
+  TextEditingController namaKodeTextController = TextEditingController();
+  TextEditingController keteranganTextController = TextEditingController();
   final _formState = GlobalKey<FormState>();
+  bool _isLoading = false;
+
+  void _validateForm() {
+    if (_formState.currentState!.validate()) {
+      _addKodeSurat();
+    }
+  }
+
+  void _addKodeSurat() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+
+      Map<String, dynamic> data = {
+        'nama_kode': namaKodeTextController.text,
+        'keterangan': keteranganTextController.text
+      };
+
+      final Response response = await KodeSuratService().postKodeSurat(data);
+
+      if (response.statusCode == 200) {
+        if (context.mounted) {
+          Navigator.pushReplacementNamed(context, '/kode-surat');
+          SnackBarService().showSnackBar(response.data['message'], context);
+        }
+      } else if (response.statusCode == 500) {
+        if (context.mounted) {
+          SnackBarService().showSnackBar(
+              'Terjadi kesalahan pada server. Coba beberapa saat lagi',
+              context);
+        }
+      } else {
+        if (context.mounted) {
+          SnackBarService().showSnackBar('${response.data}', context);
+        }
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      if (context.mounted) SnackBarService().showSnackBar('$e', context);
+    }
+  }
 
   Widget _title() {
     return Container(
@@ -44,7 +95,7 @@ class _TambahKodeSuratState extends State<TambahKodeSurat> {
             }
             return null;
           },
-          controller: nomorTextController,
+          controller: namaKodeTextController,
           decoration: InputDecoration(
             border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -88,7 +139,7 @@ class _TambahKodeSuratState extends State<TambahKodeSurat> {
             }
             return null;
           },
-          controller: asalTextController,
+          controller: keteranganTextController,
           decoration: InputDecoration(
             border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -117,18 +168,18 @@ class _TambahKodeSuratState extends State<TambahKodeSurat> {
       height: 54,
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () {
-          if (_formState.currentState!.validate()) {}
-        },
+        onPressed: _validateForm,
         style: ElevatedButton.styleFrom(
             backgroundColor: primaryColor,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10))),
-        child: Text(
-          'Kirim',
-          style: poppinsTextStyle.copyWith(
-              fontSize: 16, fontWeight: semiBold, color: Colors.white),
-        ),
+        child: _isLoading
+            ? const CircularProgressIndicator()
+            : Text(
+                'Kirim',
+                style: poppinsTextStyle.copyWith(
+                    fontSize: 16, fontWeight: semiBold, color: Colors.white),
+              ),
       ),
     );
   }

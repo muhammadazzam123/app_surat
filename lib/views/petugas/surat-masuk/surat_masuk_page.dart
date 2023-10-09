@@ -180,9 +180,7 @@ class _SuratMasukPageState extends State<SuratMasukPage> {
     return SizedBox(
       height: 50,
       child: TextFormField(
-        onChanged: (String value) {
-          _searchSuratMasuk(value);
-        },
+        onChanged: (String value) => _searchSuratMasuk(value),
         controller: searchTextController,
         decoration: InputDecoration(
           prefixIcon: Icon(
