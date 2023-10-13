@@ -1,16 +1,19 @@
+import 'package:app_surat/services/agenda_service.dart';
+import 'package:app_surat/services/snackbar_service.dart';
 import 'package:app_surat/theme.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
-class TambahAgenda extends StatefulWidget {
-  const TambahAgenda({super.key});
+class AgendaTambahPage extends StatefulWidget {
+  const AgendaTambahPage({super.key});
 
   @override
-  State<TambahAgenda> createState() => _TambahAgendaState();
+  State<AgendaTambahPage> createState() => _AgendaTambahPageState();
 }
 
-class _TambahAgendaState extends State<TambahAgenda> {
+class _AgendaTambahPageState extends State<AgendaTambahPage> {
   final _formState = GlobalKey<FormState>();
   TextEditingController tanggalController = TextEditingController();
   TextEditingController waktuTextController = TextEditingController();
@@ -18,12 +21,64 @@ class _TambahAgendaState extends State<TambahAgenda> {
   TextEditingController tempatTextController = TextEditingController();
   TextEditingController isiTextController = TextEditingController();
   late DateFormat dateFormat;
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     initializeDateFormatting();
     dateFormat = DateFormat.yMMMMEEEEd('id');
+  }
+
+  void _validateForm() {
+    if (_formState.currentState!.validate()) {
+      _addAgenda();
+    }
+  }
+
+  void _addAgenda() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+
+      Map<String, dynamic> data = {
+        'tgl_agenda': dateFormat.parse(tanggalController.text),
+        'waktu': waktuTextController.text,
+        'peserta': pesertaTextController.text,
+        'tempat': tempatTextController.text,
+        'isi_acara': isiTextController.text
+      };
+
+      final Response response =
+          await AgendaUndanganService().postAgendaUndangan(data);
+
+      if (response.statusCode == 200) {
+        if (context.mounted) {
+          Navigator.pushReplacementNamed(context, '/agenda');
+          SnackBarService().showSnackBar(response.data['message'], context);
+        }
+      } else if (response.statusCode == 500) {
+        if (context.mounted) {
+          SnackBarService().showSnackBar(
+              'Terjadi kesalahan pada server. Coba beberapa saat lagi',
+              context);
+        }
+      } else {
+        if (context.mounted) {
+          SnackBarService().showSnackBar('${response.data}', context);
+        }
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      if (context.mounted) SnackBarService().showSnackBar('$e', context);
+    }
   }
 
   Widget _title() {
@@ -117,6 +172,7 @@ class _TambahAgendaState extends State<TambahAgenda> {
             }
             return null;
           },
+          keyboardType: TextInputType.datetime,
           decoration: InputDecoration(
             border: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -277,18 +333,18 @@ class _TambahAgendaState extends State<TambahAgenda> {
       height: 54,
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () {
-          if (_formState.currentState!.validate()) {}
-        },
+        onPressed: _validateForm,
         style: ElevatedButton.styleFrom(
             backgroundColor: primaryColor,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10))),
-        child: Text(
-          'Kirim',
-          style: poppinsTextStyle.copyWith(
-              fontSize: 16, fontWeight: semiBold, color: Colors.white),
-        ),
+        child: _isLoading
+            ? const CircularProgressIndicator()
+            : Text(
+                'Kirim',
+                style: poppinsTextStyle.copyWith(
+                    fontSize: 16, fontWeight: semiBold, color: Colors.white),
+              ),
       ),
     );
   }

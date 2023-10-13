@@ -1,8 +1,9 @@
+import 'package:app_surat/models/agenda_model.dart';
 import 'package:app_surat/theme.dart';
 import 'package:flutter/material.dart';
 
-class DetailAgenda extends StatelessWidget {
-  const DetailAgenda({super.key});
+class AgendaDetailPage extends StatelessWidget {
+  const AgendaDetailPage({super.key});
 
   Widget _title() {
     return Container(
@@ -15,7 +16,7 @@ class DetailAgenda extends StatelessWidget {
     );
   }
 
-  Widget _body() {
+  Widget _body(AgendaUndangan agendaUndangan) {
     return Container(
       alignment: Alignment.topLeft,
       child: Column(
@@ -28,7 +29,7 @@ class DetailAgenda extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Text(
-            '14/11/2022',
+            '${agendaUndangan.tglAgenda}',
             style: poppinsTextStyle.copyWith(
                 fontSize: 11, fontWeight: medium, color: blackColor),
           ),
@@ -40,7 +41,7 @@ class DetailAgenda extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Text(
-            '10:58',
+            '${agendaUndangan.waktu}',
             style: poppinsTextStyle.copyWith(
                 fontSize: 11, fontWeight: medium, color: blackColor),
           ),
@@ -52,7 +53,7 @@ class DetailAgenda extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Text(
-            'Adelya Agustina',
+            '${agendaUndangan.peserta}',
             style: poppinsTextStyle.copyWith(
                 fontSize: 11, fontWeight: medium, color: blackColor),
           ),
@@ -64,19 +65,19 @@ class DetailAgenda extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           Text(
-            'Plaju, Palembang, Sumatera Selatan',
+            '${agendaUndangan.tempat}',
             style: poppinsTextStyle.copyWith(
                 fontSize: 11, fontWeight: medium, color: blackColor),
           ),
           const SizedBox(height: 10),
           Text(
-            'Isi Surat',
+            'Isi Acara',
             style: poppinsTextStyle.copyWith(
                 fontSize: 11, fontWeight: semiBold, color: blackColor),
           ),
           const SizedBox(height: 5),
           Text(
-            'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nisi eveniet deleniti, fugiat quae excepturi doloremque ',
+            '${agendaUndangan.isiAcara}',
             style: poppinsTextStyle.copyWith(
                 fontSize: 11, fontWeight: medium, color: blackColor),
           ),
@@ -87,6 +88,7 @@ class DetailAgenda extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as AgendaUndangan;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -112,7 +114,7 @@ class DetailAgenda extends StatelessWidget {
             children: [
               _title(),
               const SizedBox(height: 25),
-              _body(),
+              _body(args),
             ],
           ),
         ),

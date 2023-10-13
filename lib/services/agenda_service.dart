@@ -1,28 +1,30 @@
-import 'package:app_surat/models/kode_surat_model.dart';
+import 'package:app_surat/models/agenda_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class KodeSuratService {
+class AgendaUndanganService {
   final String _apiUri = dotenv.get('API_URI');
   final Dio _dio = Dio();
 
-  Future<List<KodeSurat>> getKodeSurats() async {
+  Future<List<AgendaUndangan>> getAgendaUndangans() async {
     try {
-      final String fullUri = '$_apiUri/v1/kode-surats';
+      final String fullUri = '$_apiUri/v1/agenda-undangans';
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String token = prefs.getString('appToken').toString();
       Response response = await _dio.get(fullUri,
           options: Options(headers: {"Authorization": 'Bearer $token'}));
-      return (response.data as List).map((e) => KodeSurat.fromJson(e)).toList();
+      return (response.data as List)
+          .map((e) => AgendaUndangan.fromJson(e))
+          .toList();
     } on DioException catch (e) {
       throw Exception(e.message);
     }
   }
 
-  Future postKodeSurat(Map<String, dynamic> data) async {
+  Future postAgendaUndangan(Map<String, dynamic> data) async {
     try {
-      final String fullUri = '$_apiUri/v1/kode-surats';
+      final String fullUri = '$_apiUri/v1/agenda-undangans';
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String token = prefs.getString('appToken').toString();
       Response response = await _dio.post(fullUri,
@@ -34,9 +36,10 @@ class KodeSuratService {
     }
   }
 
-  Future patchSuratMasuk(Map<String, dynamic> data, int? kodeSuratId) async {
+  Future patchAgendaUndangan(
+      Map<String, dynamic> data, int? agendaUndanganId) async {
     try {
-      final String fullUri = '$_apiUri/v1/kode-surats/$kodeSuratId';
+      final String fullUri = '$_apiUri/v1/agenda-undangans/$agendaUndanganId';
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String token = prefs.getString('appToken').toString();
       Response response = await _dio.post(fullUri,
@@ -48,9 +51,9 @@ class KodeSuratService {
     }
   }
 
-  Future deleteKodeSurat(int kodeSuratId) async {
+  Future deleteAgendaUndangan(int agendaUndanganId) async {
     try {
-      final String fullUri = '$_apiUri/v1/kode-surats/$kodeSuratId';
+      final String fullUri = '$_apiUri/v1/agenda-undangans/$agendaUndanganId';
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String token = prefs.getString('appToken').toString();
       Response response = await _dio.delete(fullUri,
@@ -58,19 +61,6 @@ class KodeSuratService {
       return response;
     } on DioException catch (e) {
       return e.response;
-    }
-  }
-
-  Future<List<KodeSurat>> getfilteredKodeSurats() async {
-    try {
-      final String fullUri = '$_apiUri/v1/filtered-kode-surats';
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String token = prefs.getString('appToken').toString();
-      Response response = await _dio.get(fullUri,
-          options: Options(headers: {"Authorization": 'Bearer $token'}));
-      return (response.data as List).map((e) => KodeSurat.fromJson(e)).toList();
-    } on DioException catch (e) {
-      throw Exception(e.message);
     }
   }
 }

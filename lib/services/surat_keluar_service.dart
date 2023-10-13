@@ -9,7 +9,7 @@ class SuratKeluarService {
 
   Future<List<SuratKeluar>> getSuratKeluars() async {
     try {
-      final String fullUri = '$_apiUri/v1/surat-masuks';
+      final String fullUri = '$_apiUri/v1/surat-keluars';
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String token = prefs.getString('appToken').toString();
       Response response = await _dio.get(fullUri,
@@ -24,7 +24,7 @@ class SuratKeluarService {
 
   Future postSuratKeluar(FormData data) async {
     try {
-      final String fullUri = '$_apiUri/v1/surat-masuks';
+      final String fullUri = '$_apiUri/v1/surat-keluars';
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String token = prefs.getString('appToken').toString();
       Response response = await _dio.post(fullUri,
@@ -39,7 +39,7 @@ class SuratKeluarService {
   Future patchSuratKeluar(FormData data, int? suratMasukId) async {
     try {
       final String fullUri =
-          '$_apiUri/v1/surat-masuks/$suratMasukId?_method=PATCH';
+          '$_apiUri/v1/surat-keluars/$suratMasukId?_method=PATCH';
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String token = prefs.getString('appToken').toString();
       Response response = await _dio.post(fullUri,
@@ -53,7 +53,7 @@ class SuratKeluarService {
 
   Future deleteSuratKeluar(int suratMasukId) async {
     try {
-      final String fullUri = '$_apiUri/v1/surat-masuks/$suratMasukId';
+      final String fullUri = '$_apiUri/v1/surat-keluars/$suratMasukId';
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String token = prefs.getString('appToken').toString();
       Response response = await _dio.delete(fullUri,
@@ -66,7 +66,7 @@ class SuratKeluarService {
 
   Future downloadSuratKeluar(int suratMasukId, savePath) async {
     try {
-      final String fullUri = '$_apiUri/v1/surat-masuks/file/$suratMasukId';
+      final String fullUri = '$_apiUri/v1/surat-keluars/file/$suratMasukId';
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String token = prefs.getString('appToken').toString();
       Response response = await _dio.download(fullUri, savePath,

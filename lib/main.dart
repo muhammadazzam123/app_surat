@@ -10,10 +10,9 @@ import 'package:app_surat/views/admin/pegawai/edit_pegawai.dart';
 import 'package:app_surat/views/admin/pegawai/pegawai_page.dart';
 import 'package:app_surat/views/admin/pegawai/tambah_pegawai.dart';
 import 'package:app_surat/views/login_page.dart';
-import 'package:app_surat/views/petugas/agenda/agenda.dart';
-import 'package:app_surat/views/petugas/agenda/detail_agenda.dart';
-import 'package:app_surat/views/petugas/agenda/edit_agenda.dart';
-import 'package:app_surat/views/petugas/agenda/tambah_agenda.dart';
+import 'package:app_surat/views/petugas/agenda/agenda_detail_page.dart';
+import 'package:app_surat/views/petugas/agenda/agenda_page.dart';
+import 'package:app_surat/views/petugas/agenda/agenda_tambah_page.dart';
 import 'package:app_surat/views/petugas/home_petugas_page.dart';
 import 'package:app_surat/views/petugas/kodesurat/kode_surat_page.dart';
 import 'package:app_surat/views/petugas/kodesurat/kode_surat_tambah_page.dart';
@@ -67,10 +66,9 @@ class MyApp extends StatelessWidget {
         '/surat-keluar/detail': (context) => const SuratKeluarDetailPage(),
         '/kode-surat': (context) => const KodeSuratPage(),
         '/tambah-kode-surat': (context) => const KodeSuratTambahPage(),
-        '/agenda': (context) => const AgendaSurat(),
-        '/detail-agenda': (context) => const DetailAgenda(),
-        '/tambah-agenda': (context) => const TambahAgenda(),
-        '/edit-agenda': (context) => const EditAgenda(),
+        '/agenda': (context) => const AgendaUndanganPage(),
+        '/detail-agenda': (context) => const AgendaDetailPage(),
+        '/tambah-agenda': (context) => const AgendaTambahPage(),
         // folder-pimpinan
         '/home-pimpinan': (context) => const HomePimpinan(),
         '/disposisi-page': (context) => const DisposisiPage(),
