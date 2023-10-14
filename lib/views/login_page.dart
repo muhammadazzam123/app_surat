@@ -51,10 +51,19 @@ class _LoginPageState extends State<LoginPage> {
         await prefs.setInt('userLevel', level);
 
         if (context.mounted) {
-          if (level == 1) {
-            Navigator.pushReplacementNamed(context, '/home-petugas');
-          } else {
-            _showSnackBar('Belum ada level');
+          switch (level) {
+            case 1:
+              Navigator.pushReplacementNamed(context, '/home-petugas');
+              break;
+            case 2:
+              Navigator.pushReplacementNamed(context, '/home-pimpinan');
+              break;
+            case 3:
+              Navigator.pushReplacementNamed(context, '/home-sekda');
+            case 4:
+              Navigator.pushReplacementNamed(context, '/home-admin');
+            default:
+              _showSnackBar('Akses ditolak');
           }
         }
       } else {
