@@ -32,7 +32,7 @@ class _SplashPageState extends State<SplashPage> {
         Navigator.pushReplacementNamed(context, '/home-admin');
         break;
       case 3:
-        Navigator.pushReplacementNamed(context, '/home-sekda');
+        Navigator.pushReplacementNamed(context, '/home-pimpinan');
         break;
       case 2:
         Navigator.pushReplacementNamed(context, '/home-atasan');

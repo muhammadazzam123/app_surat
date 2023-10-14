@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
               Navigator.pushReplacementNamed(context, '/home-pimpinan');
               break;
             case 3:
-              Navigator.pushReplacementNamed(context, '/home-sekda');
+              Navigator.pushReplacementNamed(context, '/home-pimpinan');
             case 4:
               Navigator.pushReplacementNamed(context, '/home-admin');
             default:
